@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#00ffffff">
+<LinearLayout
+    android:id="@+id/float_window_menu_smallmenu"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="279dp"
+    android:layout_height="279dp"
+    android:background="@drawable/float_menu"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:orientation="vertical"
+    android:clickable="true">
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="279dp"
+        android:layout_height="279dp"
+        android:clickable="true">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/buttonhalfmargin"
+            android:gravity="center"
+            android:id="@+id/top"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/buttonwidth"
+                android:layout_height="@dimen/buttonwidth"
+                android:src="@mipmap/menu4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="高速模式"
+                android:textColor="#FFFFFFFF"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/buttonhalfmargin"
+            android:gravity="center"
+            android:id="@+id/right"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/buttonwidth"
+                android:layout_height="@dimen/buttonwidth"
+                android:src="@mipmap/menu2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="非行车模式"
+                android:textColor="#FFFFFFFF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="@dimen/buttonhalfmargin"
+            android:gravity="center"
+            android:id="@+id/left"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/buttonwidth"
+                android:layout_height="@dimen/buttonwidth"
+                android:src="@mipmap/menu3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="堵车模式"
+                android:textColor="#FFFFFFFF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/buttonhalfmargin"
+            android:id="@+id/bottom"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/buttonwidth"
+                android:layout_height="@dimen/buttonwidth"
+                android:src="@mipmap/menu1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="行车模式"
+                android:textColor="#FFFFFFFF" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+</RelativeLayout>
