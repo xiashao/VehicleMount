@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -96,7 +98,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
      * 方向传感器X方向的值
      */
     private int mXDirection;
-
+    private Chronometer timer;
     final int RIGHT = 0;
     final int LEFT = 1;
     private boolean macControl=true;
@@ -115,9 +117,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driving);
-                if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        time();
         AppManager.getAppManager().addActivity(this);
         MyApplication application = (MyApplication) getApplication();
         mService = application.getmService();
@@ -144,6 +144,12 @@ public class DrivingActivity extends Activity implements OnClickListener {
         });
 
     }
+    private void time(){
+        timer = (Chronometer)this.findViewById(R.id.chronometer);
+        timer.setBase(SystemClock.elapsedRealtime());
+        //开始计时
+        timer.start();
+    }
     private GestureDetector.OnGestureListener onGestureListener =
             new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -168,10 +174,12 @@ public class DrivingActivity extends Activity implements OnClickListener {
 
         switch (action) {
             case RIGHT:
+                mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
                 mService.nextMusic();
                 break;
 
             case LEFT:
+                mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
                 mService.frontMusic();
                 break;
 

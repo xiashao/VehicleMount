@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:background="@color/black" >
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:layout_margin="10dp">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -43,13 +42,68 @@
         </FrameLayout>
     </LinearLayout>
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/linearLayout3"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp">
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="0dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:background="#fff"
+                >
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/call"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_call_grey600_36dp"/>
+            </LinearLayout>
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:padding="10dp"
+               android:background="#fff">
+               <ImageButton
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/voice"
+                   android:layout_weight="1"
+                   android:background="@drawable/ic_settings_voice_grey600_36dp"/>
+           </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:padding="10dp"
+                android:background="#fff"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="驾驶时间"
+                    android:textSize="12dp"/>
+                <Chronometer
+                    android:id ="@+id/chronometer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format="%s"
+                    android:textSize="24dp"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -57,8 +111,9 @@
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:orientation="vertical"
-            android:background="@drawable/corners_bg_white"
-            android:layout_marginBottom="10dp">
+            android:background="#fff"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="2dp">
             <TextView
                 android:id="@+id/tv_songName"
                 android:layout_width="wrap_content"
@@ -76,42 +131,26 @@
                 android:layout_marginTop="5dp"
                 android:textSize="16sp"
                 android:text="许巍"/>
-            <SeekBar
-                android:id="@+id/seekBar1"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                style="@style/Widget.SeekBar.Normal"/>
-            <Button
-                android:id="@+id/PauseImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center_horizontal|bottom"
-                android:background="@drawable/music_pause_bg" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/corners_bg_white">
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:id="@+id/call"
-                android:background="@drawable/ic_call_grey600_36dp"/>
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/PauseImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/music_pause_bg" />
+                <SeekBar
+                    android:id="@+id/seekBar1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    style="@style/Widget.SeekBar.Normal"/>
 
-            <ImageButton
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/voice"
-                android:background="@drawable/ic_settings_voice_grey600_36dp"/>
+            </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
 
