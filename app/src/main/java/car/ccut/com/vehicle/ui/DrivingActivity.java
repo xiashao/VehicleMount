@@ -115,6 +115,9 @@ public class DrivingActivity extends Activity implements OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driving);
+                if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
         AppManager.getAppManager().addActivity(this);
         MyApplication application = (MyApplication) getApplication();
         mService = application.getmService();
@@ -469,9 +472,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
         /**
          * 设置为横屏
          */
-        if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+
         mMapView.onResume();
         super.onResume();
     }
