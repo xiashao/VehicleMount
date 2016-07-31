@@ -24,6 +24,7 @@ import java.util.TimerTask;
 
 import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.ui.DrivingActivity;
+import car.ccut.com.vehicle.ui.HighspeeedActivity;
 import car.ccut.com.vehicle.ui.HomeActivity;
 import car.ccut.com.vehicle.ui.MapActivity;
 import car.ccut.com.vehicle.ui.TrafficJamModeActivity;
@@ -107,6 +108,7 @@ public class FloatWindowService extends Service implements View.OnClickListener 
         Intent intent = null;
         switch (v.getId()){
             case R.id.top:
+                intent = new Intent(getBaseContext(), HighspeeedActivity.class);
                 break;
             case R.id.left:
                 intent = new Intent(getBaseContext(), TrafficJamModeActivity.class);

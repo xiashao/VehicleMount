@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -48,7 +49,15 @@ import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.cloud.WakeuperListener;
+import com.iflytek.cloud.WakeuperResult;
+import com.iflytek.speech.SynthesizerListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -62,20 +71,21 @@ import car.ccut.com.vehicle.listener.MyOrientationListener;
 import car.ccut.com.vehicle.service.FloatWindowService;
 import car.ccut.com.vehicle.service.MusicService;
 import car.ccut.com.vehicle.service.VoiceRecognition;
+import car.ccut.com.vehicle.util.JsonParser;
 import car.ccut.com.vehicle.util.MusicUtils;
+import android.widget.Chronometer.OnChronometerTickListener;
 
-public class DrivingActivity extends Activity implements OnClickListener {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class HighspeeedActivity extends Activity implements OnClickListener {
     private com.iflytek.cloud.SynthesizerListener mTtsListener;
     // 默认云端发音人
     public static String voicerCloud="xiaoyan";
+    private TextView state;
     private SpeechSynthesizer mTts;
     private int isSpeaking = 0;
-    private Button mFrontImageButton, mPauseImageButton, mNextImageButton;
-    private TextView state;
-    private ImageButton voice,call;
-    private TextView tv_songName, tv_singerName;
-    private SeekBar seekBar1;// 播放进度条
-    private MusicService mService;
+    private ImageButton call;
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private boolean isFristIn =true;
@@ -112,6 +122,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     private boolean macControl=true;
     private GestureDetector gestureDetector;
     private boolean isBack;
+
     Handler mHandler = new Handler() {
 
         @Override
@@ -124,37 +135,23 @@ public class DrivingActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_driving);
+        setContentView(R.layout.activity_highspeed);
+        mTts= SpeechSynthesizer.createSynthesizer(this, null);
         time();
         AppManager.getAppManager().addActivity(this);
-        MyApplication application = (MyApplication) getApplication();
-        mService = application.getmService();
-        mService.setCurrentListItme(0);
-        mService.playMusic(MusicUtils.getAllSongs(this).get(0).getUrl());
         initView();
-        setListener();
-        gestureDetector = new GestureDetector(DrivingActivity.this,onGestureListener);
         call.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Settings.System.putInt(getContentResolver(),Settings.System.ACCELEROMETER_ROTATION, 1);
-//得到是否开启
-                int flag = Settings.System.getInt(getContentResolver(),
-                        Settings.System.ACCELEROMETER_ROTATION, 0);
-                startActivity(new Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:")));
+                Intent intent = new Intent(Intent.ACTION_CALL,Uri.parse("tel:10010"));
+                startActivity(intent);
             }
         });
-        voice.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mac();
-            }
-        });
-
     }
+
     private void time(){
         timer = (Chronometer)this.findViewById(R.id.chronometer);
-        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+        timer.setOnChronometerTickListener(new OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 String time = chronometer.getText().toString();
@@ -169,52 +166,10 @@ public class DrivingActivity extends Activity implements OnClickListener {
         //开始计时
         timer.start();
     }
-    private GestureDetector.OnGestureListener onGestureListener =
-            new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                                       float velocityY) {
-                    float x = e2.getX() - e1.getX();
-                    float y = e2.getY() - e1.getY();
-
-                    if (x > 0) {
-                        doResult(RIGHT);
-                    } else if (x < 0) {
-                        doResult(LEFT);
-                    }
-                    return true;
-                }
-            };
-    public boolean onTouchEvent(MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
-    }
-
-    public void doResult(int action) {
-
-        switch (action) {
-            case RIGHT:
-                mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
-                mService.nextMusic();
-                break;
-
-            case LEFT:
-                mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
-                mService.frontMusic();
-                break;
-
-        }
-    }
     private void initView() {
-//        mFrontImageButton = (Button) findViewById(R.id.LastImageButton);
-        mPauseImageButton = (Button) findViewById(R.id.PauseImageButton);
-//        mNextImageButton = (Button) findViewById(R.id.NextImageButton);
-        state=(TextView)findViewById(R.id.state);
-        tv_songName = (TextView) findViewById(R.id.tv_songName);
-        tv_singerName = (TextView) findViewById(R.id.tv_singerName);
-        seekBar1 = (SeekBar) findViewById(R.id.seekBar1);
         call=(ImageButton)findViewById(R.id.call);
-        voice=(ImageButton)findViewById(R.id.voice);
         mMapView = (MapView) findViewById(R.id.bmapView);
+        state=(TextView)findViewById(R.id.state);
         search = (AutoCompleteTextView) findViewById(R.id.search);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
@@ -231,8 +186,6 @@ public class DrivingActivity extends Activity implements OnClickListener {
         option.setIsNeedAddress(true);
         option.setScanSpan(1000);
         initOritationListener();
-        // 启动
-        handler.post(updateThread);
         mPoiSearch = PoiSearch.newInstance();
         poiListener = new OnGetPoiSearchResultListener() {
             @Override
@@ -242,7 +195,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                     return;
                 }
                 if (poiResult.error == SearchResult.ERRORNO.AMBIGUOUS_KEYWORD){
-                    Toast.makeText(DrivingActivity.this,"在附近未找到相关信息",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HighspeeedActivity.this,"在附近未找到相关信息",Toast.LENGTH_SHORT).show();
                 }
                 if (poiResult.error == SearchResult.ERRORNO.NO_ERROR){
                     mPoiResult=poiResult;
@@ -253,7 +206,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                         for (int i = 0;i<poiResult.getAllPoi().size();i++){
                             searchResult[i]=poiResult.getAllPoi().get(i).name;
                         }
-                        searchAdapter = new ArrayAdapter<String>(DrivingActivity.this,android.R.layout.simple_list_item_1,searchResult){
+                        searchAdapter = new ArrayAdapter<String>(HighspeeedActivity.this,android.R.layout.simple_list_item_1,searchResult){
                             private Filter f;
                             public Filter getF() {
                                 if(f ==null){
@@ -299,7 +252,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                             poiInfo.setLontitude(poiResult.getAllPoi().get(i).location.longitude);
                             poiInfos.add(poiInfo);
                         }
-                        Intent intent = new Intent(DrivingActivity.this,SearchInfosActivity.class);
+                        Intent intent = new Intent(HighspeeedActivity.this,SearchInfosActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("poiInfos", (Serializable) poiInfos);
                         intent.putExtras(bundle);
@@ -347,7 +300,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                     poiInfo.setLatitude(mPoiResult.getAllPoi().get(i).location.latitude);
                     poiInfo.setLontitude(mPoiResult.getAllPoi().get(i).location.longitude);
                     poiInfos.add(poiInfo);
-                    Intent intent = new Intent(DrivingActivity.this,SearchInfosActivity.class);
+                    Intent intent = new Intent(HighspeeedActivity.this,SearchInfosActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("poiInfos", (Serializable) poiInfos);
                     intent.putExtras(bundle);
@@ -359,9 +312,9 @@ public class DrivingActivity extends Activity implements OnClickListener {
         });
     }
 
-    private void  searchInfo(String searchInfo){
+    private void searchInfo(String searchInfo) {
         mPoiSearch.searchNearby(new PoiNearbySearchOption().keyword(searchInfo)
-                .location(new LatLng(mCurrentLantitude,mCurrentLongitude))
+                .location(new LatLng(mCurrentLantitude, mCurrentLongitude))
                 .pageCapacity(PAGE_CAPACITY)
                 .pageNum(PAGE_NUM)
                 .radius(RADIUS));
@@ -382,7 +335,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                         // 构造定位数据
                         MyLocationData locData = new MyLocationData.Builder()
                                 .accuracy(mCurrentAccracy)
-                                // 此处设置开发者获取到的方向信息，顺时针0-360
+                                        // 此处设置开发者获取到的方向信息，顺时针0-360
                                 .direction(mXDirection)
                                 .latitude(mCurrentLantitude)
                                 .longitude(mCurrentLongitude).build();
@@ -398,109 +351,15 @@ public class DrivingActivity extends Activity implements OnClickListener {
                 });
     }
 
-    Handler handler = new Handler();
-    Runnable updateThread = new Runnable() {
-        public void run() {
-            // 获得歌曲的长度并设置成播放进度条的最大值
-            seekBar1.setMax(mService.getDuration());
-            // 获得歌曲现在播放位置并设置成播放进度条的值
-            seekBar1.setProgress(mService.getCurrent());
 
-            tv_songName.setText(mService.getSongName());
-            tv_singerName.setText(mService.getSingerName());
-            // 每次延迟100毫秒再启动线程
-            handler.postDelayed(updateThread, 100);
-        }
-    };
 
-    private void setListener() {
-        // 暂停or开始
-        mPauseImageButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                mService.pausePlay();
-                if (mService.isPlay()) {
-                    mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
-                } else {
-                    mPauseImageButton.setBackgroundResource(R.drawable.music_play_bg);
-                }
-            }
-        });
-
-        // 下一首
-//        mNextImageButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View arg0) {
-//                mService.nextMusic();
-//            }
-//        });
-        // 上一首
-//        mFrontImageButton.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View arg0) {
-//                mService.frontMusic();
-//            }
-//        });
-        seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                // fromUser判断是用户改变的滑块的值
-                if (fromUser == true) {
-                    mService.movePlay(progress);
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-    }
     public void setTitle (String title) {
         TextView tv_title = (TextView) findViewById(R.id.tv_title);
         tv_title.setText(title);
     }
-    public void mac() {
-        Intent intent = new Intent(this, VoiceRecognition.class);
-        if (mService.isPlay()) {
-            mService.pausePlay();
-            mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
-        } else {
-            mPauseImageButton.setBackgroundResource(R.drawable.music_play_bg);
-        }
-        if (macControl) {
-            startService(intent);
-            System.out.println("service已启动");
 
-        } else {
-            stopService(intent);
-        }
-    }
-    /**
-     * 格式化时间，将其变成00:00的形式
-     */
-    public String formatTime(int time) {
-        int secondSum = time / 1000;
-        int minute = secondSum / 60;
-        int second = secondSum % 60;
-
-        String result = "";
-        if (minute < 10)
-            result = "0";
-        result = result + minute + ":";
-        if (second < 10)
-            result = result + "0";
-        result = result + second;
-        return result;
-    }
     @Override
     protected void onResume() {
-        /**
-         * 设置为横屏
-         */
-
         mMapView.onResume();
         super.onResume();
     }
@@ -557,7 +416,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                     .accuracy(bdLocation.getRadius())//
                     .direction(mXDirection).latitude(bdLocation.getLatitude())//
                     .longitude(bdLocation.getLongitude()).//
-                    build();
+                            build();
             mBaiduMap.setMyLocationData(data);
             mCurrentLantitude = bdLocation.getLatitude();
             mCurrentLongitude = bdLocation.getLongitude();
@@ -600,7 +459,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     }
     private void startTts(String text){
         int code = mTts.startSpeaking(text,mTtsListener);
-        if (code!= ErrorCode.SUCCESS){
+        if (code!=ErrorCode.SUCCESS){
             System.out.println(code);
         }
     }
