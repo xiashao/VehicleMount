@@ -1,6 +1,8 @@
 package car.ccut.com.vehicle.ui;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -122,7 +124,9 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
     private boolean macControl=true;
     private GestureDetector gestureDetector;
     private boolean isBack;
-
+    private AlarmManager alarmManager;
+    Intent intent;
+    PendingIntent pi;
     Handler mHandler = new Handler() {
 
         @Override

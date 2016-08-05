@@ -69,6 +69,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     // 默认云端发音人
     public static String voicerCloud="xiaoyan";
     private SpeechSynthesizer mTts;
+
     private int isSpeaking = 0;
     private Button mFrontImageButton, mPauseImageButton, mNextImageButton;
     private TextView state;
@@ -125,6 +126,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driving);
+        mTts= SpeechSynthesizer.createSynthesizer(this, null);
         time();
         AppManager.getAppManager().addActivity(this);
         MyApplication application = (MyApplication) getApplication();
