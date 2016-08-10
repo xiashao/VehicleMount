@@ -48,7 +48,7 @@ public class PhoneContactDao {
 			while (phoneCursor.moveToNext()) {
 				String name=phoneCursor.getString(PHONES_DISPLAY_NAME_INDEX);
 				/*if(name.contains("爸")||name.contains("妈")||name.contains("哥")||name.contains("姐")||name.contains("公")||name.contains("婆")||name.contains("鑫"))*/
-				if(name.contains("琦"))
+				if(name.contains("鑫"))
 				{
 				PhoneContact contact=new PhoneContact();
 				//得到手机号码

@@ -1,5 +1,6 @@
 package car.ccut.com.vehicle.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.interf.ConstantValue;
+import car.ccut.com.vehicle.service.MyService;
 import car.ccut.com.vehicle.ui.OrderManageActivity;
 import car.ccut.com.vehicle.ui.UserCenterActivity;
 
@@ -44,13 +46,13 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_fragment2,container,false);
+        View view = inflater.inflate(R.layout.home_fragment2, container, false);
         ButterKnife.bind(this,view);
         return view;
     }
 
     @Override
-    @OnClick({R.id.user_center,R.id.set,R.id.order_manage})
+    @OnClick({R.id.user_center,R.id.set,R.id.order_manage,R.id.drink})
     public void onClick(View view) {
         int id = view.getId();
         switch (id){
@@ -59,6 +61,10 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                 startActivity(i);
                 break;
             case R.id.set:
+                break;
+            case R.id.drink:
+                Intent startIntent = new Intent(getActivity(), MyService.class);
+                view.getContext().startService(startIntent);
                 break;
             case R.id.order_manage:
                 Intent intent = new Intent(getActivity(), OrderManageActivity.class);
