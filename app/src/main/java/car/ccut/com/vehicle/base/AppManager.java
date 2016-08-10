@@ -92,7 +92,7 @@ public class AppManager {
      */
     public void finishAllActivity() {
         for (int i = 0, size = activityStack.size(); i < size; i++) {
-            if (null != activityStack.get(i)) {
+            if (size>0&&null != activityStack.get(i)) {
                 finishActivity(activityStack.get(i));
                 break;
             }

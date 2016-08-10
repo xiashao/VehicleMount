@@ -29,11 +29,13 @@ import java.io.File;
 import java.util.List;
 
 import car.ccut.com.vehicle.bean.Mp3;
+import car.ccut.com.vehicle.bean.UpdateTrafficJamInfo;
 import car.ccut.com.vehicle.bean.User;
 import car.ccut.com.vehicle.bean.car.CarInfo;
 import car.ccut.com.vehicle.interf.ConstantValue;
 import car.ccut.com.vehicle.service.MusicService;
 import car.ccut.com.vehicle.util.MusicUtils;
+import cn.jpush.android.api.JPushInterface;
 
 /**
  * *
@@ -56,6 +58,8 @@ public class MyApplication extends Application {
     public static RequestQueue queues;
     public static CarInfo currentServerCar;
     public static User currentUser;
+    public static Context context;
+    public static UpdateTrafficJamInfo updateTrafficJamInfo;
     public static DisplayImageOptions options = new DisplayImageOptions.Builder()
             .showImageOnLoading(R.mipmap.image_default)
             .showImageOnFail(R.mipmap.image_default)
@@ -114,6 +118,9 @@ public class MyApplication extends Application {
             SDKInitializer.initialize(getApplicationContext());
             currentServerCar = new CarInfo();
             currentUser = new User();
+            updateTrafficJamInfo = new UpdateTrafficJamInfo();
+            context = getApplicationContext();
+            JPushInterface.init(getApplicationContext());
             Intent intent = new Intent(this, MusicService.class);
             startService(intent);
             bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -166,11 +173,17 @@ public class MyApplication extends Application {
         return currentUser;
     }
 
+    public static UpdateTrafficJamInfo getUpdateTrafficJamInfo() {
+        return updateTrafficJamInfo;
+    }
 
     public static void setCurrentUser(User currentUser) {
         MyApplication.currentUser = currentUser;
     }
 
+    public static  Context getContext(){
+        return context;
+    }
 
    public static String getCurProcessName(Context context) {
         int pid = android.os.Process.myPid();

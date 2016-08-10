@@ -90,4 +90,5 @@
     <color name="station_list_gray">#D7D7D7</color>
     <color name="sort_normal">#F8F8F8</color>
     <color name="lightBg">#fefefe</color>
+    <color name="common_color">#ff4c4c4c</color>
 </resources>

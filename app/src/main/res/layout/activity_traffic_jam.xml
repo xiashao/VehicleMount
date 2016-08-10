@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.app.FragmentTabHost
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/tabhost"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_theme_bg">
-
-    <LinearLayout
-        android:orientation="vertical"
+    <include layout="@layout/include_title_view"
+        android:id="@+id/title"/>
+    <com.baidu.mapapi.map.MapView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:id="@android:id/tabcontent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapView"
+        android:layout_above="@+id/linearLayout"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout">
+        <Button
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="0"/>
-
-        <FrameLayout
-            android:id="@+id/realtabcontent"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:background="@color/lightBg"
-            android:divider="#00000000" />
-
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="路况播报"
+            android:textSize="22sp"
+            android:textColor="@drawable/traffic_jam_text_selector"
+            android:background="@drawable/traffic_jam_btn_selector"
+            android:id="@+id/broadcast"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="解堵"
+            android:id="@+id/plugging"
+            android:textColor="@drawable/un_traffic_jam_text_selector"
+            android:background="@drawable/un_traffic_jam_btn_selector"
+            android:textSize="22sp"/>
     </LinearLayout>
-</android.support.v4.app.FragmentTabHost>
+</RelativeLayout>

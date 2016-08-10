@@ -11,6 +11,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class JsonRequestWithAuth<T> extends Request<T> {
     private final Class<T> clazz;
     private final Listener<T> listener;
     private static final Map<String,String>params = new HashMap<String,String>();
+    private static final Map<String ,String> header = new HashMap<>();
 
 
     public JsonRequestWithAuth(String url,Class<T> clazz,Listener<T> listener,Map<String,String>appendParams,ErrorListener errorListener){
@@ -36,11 +38,26 @@ public class JsonRequestWithAuth<T> extends Request<T> {
         params.putAll(appendParams);
     }
 
+    public JsonRequestWithAuth(String url,Class<T> clazz,Listener<T> listener,Map<String,String> appendHeader,Map<String,String>appendParams,ErrorListener errorListener){
+        super(Method.POST,url,errorListener);
+        this.clazz = clazz;
+        this.listener=listener;
+        header.putAll(appendHeader);
+        params.putAll(appendParams);
+    }
+
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        return header;
+    }
+
 
     @Override
     protected Map<String, String> getParams() throws AuthFailureError{
         return params;
     }
+
 
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {

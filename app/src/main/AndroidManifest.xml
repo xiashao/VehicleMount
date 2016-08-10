@@ -77,10 +77,12 @@
         <service android:name=".service.VoiceRecognition"/>
         <service android:name="com.cheshouye.api.client.WeizhangIntentService"/>
         <service android:name=".service.FloatWindowService"/>
+        <!--<meta-data-->
+            <!--android:name="com.baidu.lbsapi.API_KEY"-->
+            <!--android:value="Sk2wxXFuiEzGTOON1xf8Ke1NqVBMwlXO"/>-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Sk2wxXFuiEzGTOON1xf8Ke1NqVBMwlXO" />
-
+            android:value="Ktl1AKoU63CoPXy7PfcjKd938cE03jNY"/>
         <meta-data android:name="design_width" android:value="768"/>
         <meta-data android:name="design_height" android:value="1280"/>
         <activity
@@ -205,8 +207,15 @@
         <activity android:name=".ui.TrafficJamModeActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.DrivingActivity"></activity>
-        <activity android:name=".ui.HighspeeedActivity"></activity>
+        <activity android:name=".ui.DrivingActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.HighspeeedActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.BroadcastStatusActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <!--Jpush start-->
         <!-- Required SDK核心功能-->
         <activity

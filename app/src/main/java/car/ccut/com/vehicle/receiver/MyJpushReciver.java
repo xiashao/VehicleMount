@@ -5,6 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.SpeechSynthesizer;
+import com.iflytek.speech.SynthesizerListener;
+
+import car.ccut.com.vehicle.MyApplication;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -25,29 +30,24 @@ import cn.jpush.android.api.JPushInterface;
  * Created by WangXin on 2016/7/17 0017.
  */
 public class MyJpushReciver extends BroadcastReceiver {
+    private SynthesizerListener mTtsListener;
+    private SpeechSynthesizer mTts = SpeechSynthesizer.createSynthesizer(MyApplication.getContext(),null);
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
 
          if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
-//            Log.d(TAG, "[MyReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
-//            processCustomMessage(context, bundle);
+             String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
+             System.out.println(message+"++++++");
+             startTts("实时,"+message);
 
-        } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
-//            Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
-//            int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-//            Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+        }
+    }
 
-        } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
-//            Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
-            //打开自定义的Activity
-//            Intent i = new Intent(context, TestActivity.class);
-//            i.putExtras(bundle);
-            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-//            context.startActivity(i);
-        } else {
-//            Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
+    private void startTts(String text){
+        int code = mTts.startSpeaking(text, (com.iflytek.cloud.SynthesizerListener) mTtsListener);
+        if (code!= ErrorCode.SUCCESS){
+            System.out.println(code);
         }
     }
 }

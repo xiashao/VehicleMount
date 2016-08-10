@@ -70,8 +70,6 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
     private int currentDay;
     private String [] refuelItems;
     private float price;
-    private static final int UNFINISHED = 0;
-    private static final int ALL = 1;
 
     DecimalFormat decimalFormat=new DecimalFormat(".00");
 
@@ -156,33 +154,6 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
         }
     }
 
-    private void initRayMenu(RayMenu rayMenu,int[] itemDrawables){
-        final int itemCount = itemDrawables.length;
-        viewHolder viewHolder = null;
-        for (int i = 0;i<itemCount;i++){
-            viewHolder = new viewHolder();
-            View view = LayoutInflater.from(this).inflate(R.layout.ray_menu_item,null);
-            viewHolder.itemIcon = (ImageView) view.findViewById(R.id.image_item);
-            viewHolder.itemIcon.setImageResource(itemDrawables[i]);
-            final int position = i;
-            rayMenu.addItem(view, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final Intent intent = new Intent(IndentWriteActivity.this,OrderManageActivity.class);
-                    switch (position){
-                        case 0:
-                            intent.putExtra("orderType",UNFINISHED);
-                            break;
-                        case 1:
-                            intent.putExtra("orderType",ALL);
-                            break;
-                    }
-                    startActivity(intent);
-                }
-            });
-        }
-    }
-
     @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancel) {
 
@@ -196,9 +167,6 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
         refuelPrice.setText(price+"元/升");
     }
 
-    static class viewHolder{
-        public ImageView itemIcon;
-    }
 
     public void showDate(){
         final AlertDialog dialog = new AlertDialog.Builder(IndentWriteActivity.this).create();

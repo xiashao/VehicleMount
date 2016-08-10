@@ -157,8 +157,21 @@
     <string name="undriver_car_type">非行车模式</string>
     <string name="crowded_type">堵车模式</string>
     <string name="fast_type">高速模式</string>
+    <string name="network_fault">网络故障,请您检查网络</string>
 
     <dimen name="buttonwidth">45dp</dimen>
     <dimen name="buttonfullmargin">36dp</dimen>
     <dimen name="buttonhalfmargin">18dp</dimen>
+
+    <string-array name="traffic_jam_reason">
+        <item>上班高峰</item>
+        <item>恶略天气</item>
+        <item>交通事故</item>
+        <item>道路施工</item>
+        <item>未知原因</item>
+    </string-array>
+    <string-array name="traffic_jam_status">
+        <item>严重拥堵</item>
+        <item>轻度拥堵</item>
+    </string-array>
 </resources>

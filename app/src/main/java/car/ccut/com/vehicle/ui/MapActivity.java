@@ -167,6 +167,7 @@ public class MapActivity extends BaseActivity{
         option.setOpenGps(true);
         option.setIsNeedAddress(true);
         option.setScanSpan(1000);
+        locationClient.setLocOption(option);
         macControl=true;
         // 初始化传感器
         initOritationListener();

@@ -241,6 +241,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
         option.setOpenGps(true);
         option.setIsNeedAddress(true);
         option.setScanSpan(1000);
+        locationClient.setLocOption(option);
         initOritationListener();
         // 启动
         handler.post(updateThread);

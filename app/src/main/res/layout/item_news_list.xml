@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/lightBg" >
+
+    <ImageView
+        android:id="@+id/iv_thumb"
+        android:layout_width="80dp"
+        android:layout_height="65dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_thumb"
+        android:layout_alignTop="@+id/iv_thumb"
+        android:lines="1"
+        android:textColor="@color/common_color"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_abstract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_toRightOf="@id/iv_thumb"
+        android:layout_marginTop="5dp"
+        android:lines="2"
+        android:ellipsize="end"
+        android:textColor="@color/app_theme_gray"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_old_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tv_abstract"
+        android:layout_toRightOf="@id/tv_abstract"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        android:textSize="14sp" />
+
+</RelativeLayout>

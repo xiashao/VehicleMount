@@ -1,6 +1,6 @@
-package car.ccut.com.vehicle.fragment;
+package car.ccut.com.vehicle.bean;
 
-import car.ccut.com.vehicle.base.BaseFragment;
+import java.io.Serializable;
 
 /**
  * *
@@ -17,7 +17,17 @@ import car.ccut.com.vehicle.base.BaseFragment;
  * 　 ヽ_ﾉ　　(_／　 │／／           消灭代码BUG
  * 　　7　　　　　　　|／
  * 　　＞―r￣￣`ｰ―＿
- * Created by WangXin on 2016/7/28 0028.
+ * Created by WangXin on 2016/7/30 0030.
  */
-public class ShareTrafficFragment extends BaseFragment{
+public class NewsResultBody implements Serializable{
+    private int ret_code;
+    private NewsPage pagebean;
+
+    public int getRet_code() {
+        return ret_code;
+    }
+
+    public NewsPage getPagebean() {
+        return pagebean;
+    }
 }

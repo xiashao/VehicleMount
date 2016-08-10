@@ -19,7 +19,7 @@ package car.ccut.com.vehicle.interf;
  */
 public class ConstantValue {
     //加油站信息获取key
-    public static final String REFUEL_KEY = "5a193c21af3fe1601c9ee7800a65805a";
+    public static final String REFUEL_KEY = "ce55c7f333b99b114861978f5890e797";
     //请求接口地址
     public static final String REDUEL_STATION_URL ="http://apis.juhe.cn/oil/local";
     //短信验证key
@@ -49,6 +49,8 @@ public class ConstantValue {
     public static final String CAR_PHOTO_URL = IMAGE_BASE_URL+"car/";
     public static final String ORDER_MARK_URL = IMAGE_BASE_URL+"order/";
     public static final String CAR_RECORD = BASE_URL+"carRecord/";
+    public static final String NEWS = BASE_URL+"news/";
+    public static final String TRAFFIC_JAM = BASE_URL +"jam/";
     //请求汽车品牌地址
     public static final String  REQUEST_CAR_NAME = BASE_URL+"brand/getBrandList";
     //请求汽车类型
@@ -93,6 +95,16 @@ public class ConstantValue {
     public static final String UPDATE_EXPEND_NUMBER = CAR_RECORD+"update/expendNumber";
     //修改燃油量
     public static final String UPDATE_FUEL_AMOUNT=CAR_RECORD+"update/fuelAmount";
+    //获取新闻分类
+    public static final String GET_ALL_NEWS_CATE = NEWS+"getNewsCate";
+    //添加堵车信息
+    public static final String ADD_TRAFFIC_JAM_INFO = TRAFFIC_JAM+"addTrafficJamInfo";
+    //获取所有堵车信息
+    public static final String GET_ALL_TRAFFIC_INFO = TRAFFIC_JAM+"getAllTrafficJamInfo";
+    //按城市获取堵车信息
+    public static final String GET_ALL_TRAFFIC_INFO_BY_CITY = TRAFFIC_JAM+"getAllTrafficJamInfoByCity";
+    //修改堵车信息
+    public static final String UPDATE_TRAFFIC_JAM_INFO = TRAFFIC_JAM+"updateTrafficJamInfo";
     //导航线路偏好
     //推荐
     public static final int ROUTE_PLAN_MOD_RECOMMEND = 1;
@@ -107,6 +119,13 @@ public class ConstantValue {
 
     public static final String[] payNames = new String[]{"微信支付", "支付宝支付",
             "银联在线", "百度钱包"};
+    public static final String [] newsCate = new String[]{"汽车","教育","互联网","科普","养生","财经","房产","军事","科技","体育","娱乐","游戏","两性"};
+    public static final String [] newsId = new String[]{"5572a108b3cdc86cf39001d3","5572a108b3cdc86cf39001d7","5572a108b3cdc86cf39001d1",
+    "5572a10ab3cdc86cf39001f4","5572a10ab3cdc86cf39001f3","5572a108b3cdc86cf39001d0","5572a108b3cdc86cf39001d2","5572a108b3cdc86cf39001cf","5572a108b3cdc86cf39001d9",
+    "5572a108b3cdc86cf39001d4","5572a108b3cdc86cf39001d5","5572a108b3cdc86cf39001d6","5572a10ab3cdc86cf39001f2"};
+
+    public static final String NEWS_KEY = "e764b2dda10d6f9517acc304b746a3e9";
+    public static final String NEWS_URL = " http://apis.baidu.com/showapi_open_bus/channel_news/search_news";
 
     public static final String PARTNER1 = "2088121294855412";
     // 商户收款账号

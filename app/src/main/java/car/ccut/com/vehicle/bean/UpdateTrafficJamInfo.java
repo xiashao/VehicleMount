@@ -1,6 +1,6 @@
-package car.ccut.com.vehicle.fragment;
+package car.ccut.com.vehicle.bean;
 
-import car.ccut.com.vehicle.base.BaseFragment;
+import java.io.Serializable;
 
 /**
  * *
@@ -17,8 +17,25 @@ import car.ccut.com.vehicle.base.BaseFragment;
  * 　 ヽ_ﾉ　　(_／　 │／／           消灭代码BUG
  * 　　7　　　　　　　|／
  * 　　＞―r￣￣`ｰ―＿
- * Created by WangXin on 2016/7/28 0028.
+ * Created by WangXin on 2016/8/4 0004.
  */
-public class SootheMusicFragment extends BaseFragment{
+public class UpdateTrafficJamInfo implements Serializable{
+    private String id ="";
+    private boolean isEndTrafficJam=true;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isEndTrafficJam() {
+        return isEndTrafficJam;
+    }
+
+    public void setEndTrafficJam(boolean endTrafficJam) {
+        isEndTrafficJam = endTrafficJam;
+    }
 }

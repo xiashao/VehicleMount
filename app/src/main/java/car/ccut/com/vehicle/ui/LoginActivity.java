@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tasomaniac.android.widget.DelayedProgressDialog;
@@ -65,6 +69,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Intent it;
     public DelayedProgressDialog dialog;
     private User user;
+    private LocationClient locationClient;
+    private MyLocationListener myLocationListener;
+    private boolean isSetTag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +100,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         JPushInterface.onPause(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!locationClient.isStarted()){
+            locationClient.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationClient.stop();
+    }
+
     private void initData() {
         useName = myPreferences.getString("username", "");
         psd = myPreferences.getString("password","");
         if (!useName.isEmpty()&&!psd.isEmpty()){
-            userName.setText(useName);
-            password.setText(psd);
-            login(useName,psd);
+            dialog.show();
         }
+        locationClient = new LocationClient(this);
+        myLocationListener = new MyLocationListener();
+        locationClient.registerLocationListener(myLocationListener);
+        LocationClientOption option = new LocationClientOption();
+        option.setCoorType("bd09ll");
+        option.setOpenGps(true);
+        option.setIsNeedAddress(true);
+        option.setScanSpan(0);
+        locationClient.setLocOption(option);
     }
 
     private void requestCarInfo(String userId){
@@ -136,6 +165,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         int id = view.getId();
         switch (id){
             case R.id.login_btn:
+                if (!isSetTag){
+                    return;
+                }
                 useName=userName.getText().toString();
                 psd= password.getText().toString();
                 if (TextUtils.isEmpty(useName)||TextUtils.isEmpty(psd)){
@@ -161,12 +193,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+        if (locationClient.isStarted()){
+            locationClient.stop();
+        }
+        locationClient=null;
         MyApplication.getHttpQueues().cancelAll("loginRequest");
         MyApplication.getHttpQueues().cancelAll("requestCarInfo");
     }
 
     private void login(final String username, final String password){
-        dialog.show();
+        if (!dialog.isShowing()){
+            dialog.show();
+        }
         Map params = new HashMap();
         params.put("username",username);
         params.put("password",MD5.getMd5(password));
@@ -177,30 +215,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (response.isOk()){
                             Gson gson = new Gson();
                             user = gson.fromJson(response.getResponseData().get("user").toString(),User.class);
-                            Set<String> tags = new HashSet<String>();
-                            String address = user.getAddress();
-                            String sTag="";
-                            if (address.charAt(address.length()-1)=='区'){
-                                sTag = address.substring(0,address.indexOf("市"));
-                            }else {
-                                sTag = address;
+                            if (user!=null){
+                                MyApplication.setCurrentUser(user);
+                                requestCarInfo(user.getId());
                             }
-                            tags.add(sTag);
-                            JPushInterface.setAliasAndTags(getApplicationContext(), user.getUsername(), tags,new TagAliasCallback() {
-                                @Override
-                                public void gotResult(int i, String alias, Set<String> tags) {
-                                    System.out.println("别名是:"+alias);
-                                    System.out.println("标签是:"+tags.toString());
-                                    if (user!=null){
-                                        MyApplication.setCurrentUser(user);
-                                        requestCarInfo(user.getId());
-                                    }
-                                    SharedPreferences.Editor editor = myPreferences.edit();
-                                    editor.putString("username",username);
-                                    editor.putString("password",password);
-                                    editor.commit();
-                                }
-                            });
+                            SharedPreferences.Editor editor = myPreferences.edit();
+                            editor.putString("username",username);
+                            editor.putString("password",password);
+                            editor.commit();
                         }else {
                             System.out.println(response.getResponseStatus());
                             Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
@@ -232,5 +254,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public boolean handleMessage(Message message) {
         return false;
+    }
+
+    public class MyLocationListener implements BDLocationListener{
+
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            String tag = bdLocation.getCity();
+            if (tag==null||tag.equals("")){
+                return;
+            }
+            Set<String> tags = new HashSet<String>();
+            tags.add(tag);
+            JPushInterface.setTags(LoginActivity.this, tags, new TagAliasCallback() {
+                @Override
+                public void gotResult(int i, String s, Set<String> tags) {
+                    System.out.println("标签是:"+tags.toString());
+                    isSetTag = true;
+                    if (!useName.isEmpty()&&!psd.isEmpty()){
+                        userName.setText(useName);
+                        password.setText(psd);
+                        login(useName,psd);
+                    }
+                }
+            });
+        }
     }
 }
