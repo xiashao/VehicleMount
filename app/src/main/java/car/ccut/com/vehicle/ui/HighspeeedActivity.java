@@ -124,6 +124,10 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
         }
     };
     private LinearLayout myLayout;
+    private double beginLo=0;
+    private double beginLa=0;
+    private double ELo=0;
+    private double ELa=0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -161,12 +165,14 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
         timeService = new Intent(this,TimeService.class);
         this.startService(timeService);
     }
-
     private void time(){
         timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 String time = chronometer.getText().toString();
+                if(time.equals("00:05")){
+                    startTts("您处于疲劳驾驶状态");
+                }
                 SimpleDateFormat CurrentTime = new SimpleDateFormat("mm:ss");
                 try {
                     Date beginTime = CurrentTime.parse(time);
@@ -175,13 +181,16 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
                         state.setText("疲劳驾驶");
                         myLayout.setBackgroundColor(Color.parseColor("#EE9A00"));
                         call.setImageDrawable(getResources().getDrawable(R.drawable.hscall2));
-                        if ((beginTime.getTime() / 1000 - endTime.getTime() / 1000) % 5 == 0) {
-                            startTts("您处于疲劳驾驶状态");
-                        }
+                    }
+                    if (((endTime.getTime() - beginTime.getTime())> 0)) {
+                        state.setText("正常驾驶");
+                        myLayout.setBackgroundColor(Color.parseColor("#43CD80"));
+                        call.setImageDrawable(getResources().getDrawable(R.drawable.hscall));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
             }
         });
     }

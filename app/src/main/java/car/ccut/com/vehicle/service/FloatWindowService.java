@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import junit.framework.Test;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,6 +30,7 @@ import car.ccut.com.vehicle.ui.HighspeeedActivity;
 import car.ccut.com.vehicle.ui.HomeActivity;
 import car.ccut.com.vehicle.ui.MapActivity;
 import car.ccut.com.vehicle.ui.TrafficJamModeActivity;
+import car.ccut.com.vehicle.ui.test;
 
 
 public class FloatWindowService extends Service implements View.OnClickListener {

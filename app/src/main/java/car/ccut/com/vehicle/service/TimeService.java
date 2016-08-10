@@ -7,18 +7,20 @@ package car.ccut.com.vehicle.service;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import car.ccut.com.vehicle.receiver.UITimeReceiver;
-import car.ccut.com.vehicle.ui.DrivingActivity;
 import car.ccut.com.vehicle.ui.HighspeeedActivity;
 
 public class TimeService extends Service {
@@ -27,12 +29,9 @@ public class TimeService extends Service {
     private SimpleDateFormat sdf = null;
     private Intent timeIntent = null;
     private Bundle bundle = null;
-    private double beginLo;
-    private double beginLa;
-    private double ELo;
-    private double ELa;
-    public long recordingTime=0;// 记录下来的总时间
-   /* private UITimeReceiver rord=new UITimeReceiver();*/
+    private double a,b,c,d;
+    public long recordingTime=1000;// 记录下来的总时间
+    private LocationClient locationClient = null;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,6 +39,7 @@ public class TimeService extends Service {
 
         //初始化
         this.init();
+        JW();
         //定时器发送广播
         timer.schedule(new TimerTask() {
             @Override
@@ -48,8 +48,10 @@ public class TimeService extends Service {
                 sendTimeChangedBroadcast();
                 recordingTime = recordingTime + 1000;
             }
-        }, 1000, 1000);
+        }, 0, 1000);
+
     }
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -97,11 +99,37 @@ public class TimeService extends Service {
         super.onDestroy();
         Log.i(TAG, "TimeService->onDestroy");
     }
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            // 显示定位结果
-            beginLo=location.getLongitude();
-            beginLa=location.getLatitude();
-        }
+    private void JW()
+    {
+        locationClient = new LocationClient(this);
+        //设置定位条件
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);		//是否打开GPS
+        option.setScanSpan(30000);
+        option.setCoorType("bd09ll");		//设置返回值的坐标类型。
+        option.setProdName("LocationDemo");	//设置产品线名称。强烈建议您使用自定义的产品线名称，方便我们以后为您提供更高效准确的定位服务。
+        locationClient.setLocOption(option);
+
+        //注册位置监听器
+        locationClient.registerLocationListener(new BDLocationListener() {
+
+            @Override
+            public void onReceiveLocation(BDLocation location) {
+                // TODO Auto-generated method stub
+                if (location == null) {
+                    return;
+                }
+                c = a;
+                d = b;
+                a = location.getLatitude();
+                b = location.getLongitude();
+                if (a == c) {
+                    recordingTime = 0;
+                }
+            }
+
+        });
+        locationClient.start();
+        locationClient.requestLocation();
     }
 }

@@ -11,6 +11,11 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.Chronometer;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+
 import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.ui.DrivingActivity;
 import car.ccut.com.vehicle.ui.HighspeeedActivity;
@@ -23,16 +28,20 @@ public class UITimeReceiver extends BroadcastReceiver{
     private HighspeeedActivity dUIActivity = new HighspeeedActivity();
     private DrivingActivity UIActivity = new DrivingActivity();
     public long recordingTime;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         recordingTime = bundle.getLong("s");
         String action = intent.getAction();
         if(HighspeeedActivity.TIME_CHANGED_ACTION.equals(action)){
-
-            dUIActivity.timer.setBase(SystemClock.elapsedRealtime() - recordingTime);
+            if(recordingTime==0){
+                dUIActivity.timer.stop();
+            }
+            else
+            { dUIActivity.timer.setBase(SystemClock.elapsedRealtime() - recordingTime);
             //开始计时
-            dUIActivity.timer.start();
+            dUIActivity.timer.start();}
         }
 
     }
