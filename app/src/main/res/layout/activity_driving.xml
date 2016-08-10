@@ -44,7 +44,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.2"
         android:id="@+id/linearLayout3"
         android:orientation="vertical">
         <LinearLayout
@@ -59,7 +59,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:padding="10dp"
                 android:background="#fff"
                 >
                 <ImageButton
@@ -67,20 +66,19 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/call"
                     android:layout_weight="1"
-                    android:background="@drawable/ic_call_grey600_36dp"/>
+                    android:background="@drawable/call_s"/>
             </LinearLayout>
            <LinearLayout
                android:layout_width="0dp"
                android:layout_height="match_parent"
                android:layout_weight="1"
-               android:padding="10dp"
                android:background="#fff">
                <ImageButton
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:id="@+id/voice"
                    android:layout_weight="1"
-                   android:background="@drawable/ic_settings_voice_grey600_36dp"/>
+                   android:background="@drawable/voice_s"/>
            </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -88,7 +86,7 @@
                 android:layout_weight="3"
                 android:padding="10dp"
                 android:orientation="vertical"
-                android:background="#fff"
+                android:background="#43CD80"
                 android:layout_marginLeft="2dp">
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -106,6 +104,7 @@
                         android:layout_height="wrap_content"
                         android:format="%s"
                         android:textSize="20dp"
+                        android:textColor="@color/white"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -123,6 +122,7 @@
                         android:layout_height="wrap_content"
                         android:text="正常驾驶"
                         android:id="@+id/state"
+                        android:textColor="#EEEE00"
                         android:textSize="20dp"
                         />
                 </LinearLayout>
@@ -133,11 +133,10 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:gravity="center_horizontal"
-            android:padding="10dp"
             android:orientation="vertical"
-            android:background="#fff"
+            android:background="#000000"
             android:layout_marginBottom="0dp"
-            android:layout_marginTop="2dp">
+            >
             <TextView
                 android:id="@+id/tv_songName"
                 android:layout_width="wrap_content"
@@ -145,31 +144,37 @@
                 android:singleLine="true"
                 android:ellipsize="marquee"
                 android:textSize="18sp"
-                android:textColor="@color/black"
+                android:textColor="#fff"
                 android:layout_marginTop="10dp"
-                android:text="曾经的你" />
+                android:text="曾经的你"
+                />
             <TextView
                 android:id="@+id/tv_singerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textSize="16sp"
-                android:text="许巍"/>
+                android:text="许巍"
+                android:textColor="#fff" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <Button
-                    android:id="@+id/PauseImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/music_pause_bg" />
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
                 <SeekBar
                     android:id="@+id/seekBar1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    style="@style/Widget.SeekBar.Normal"/>
+                    android:maxHeight="3dp"
+                    android:max="100"
+                    android:progress="80"
+                    android:progressDrawable="@drawable/progress_bar" />
+                <Button
+                    android:id="@+id/PauseImageButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/pause" />
+
 
             </LinearLayout>
 

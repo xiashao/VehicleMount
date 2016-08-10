@@ -197,6 +197,12 @@
                 <category android:name="car.ccut.com.vehicle" />
             </intent-filter>
         </activity>
+        <service android:name=".service.TimeService"></service>
+        <receiver android:name=".receiver.UITimeReceiver">
+            <intent-filter>
+                <action android:name="haha"/>
+            </intent-filter>
+        </receiver>
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"

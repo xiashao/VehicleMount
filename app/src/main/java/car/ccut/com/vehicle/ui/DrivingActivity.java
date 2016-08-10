@@ -1,6 +1,7 @@
 package car.ccut.com.vehicle.ui;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -59,6 +60,7 @@ import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.bean.PoiInfos;
 import car.ccut.com.vehicle.listener.MyOrientationListener;
+import car.ccut.com.vehicle.receiver.UITimeReceiver;
 import car.ccut.com.vehicle.service.FloatWindowService;
 import car.ccut.com.vehicle.service.MusicService;
 import car.ccut.com.vehicle.service.VoiceRecognition;
@@ -107,9 +109,10 @@ public class DrivingActivity extends Activity implements OnClickListener {
      * 方向传感器X方向的值
      */
     private int mXDirection;
-    private Chronometer timer;
+    public Chronometer timer;
     final int RIGHT = 0;
     final int LEFT = 1;
+    public static String TIME_CHANGED_ACTION = "haha";
     private boolean macControl=true;
     private GestureDetector gestureDetector;
     private boolean isBack;
@@ -121,11 +124,17 @@ public class DrivingActivity extends Activity implements OnClickListener {
             isBack = false;
         }
     };
+
+    Intent intent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driving);
+        intent = new Intent(this, UITimeReceiver.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setAction("haha");
+        timer = (Chronometer)this.findViewById(R.id.chronometer);
         mTts= SpeechSynthesizer.createSynthesizer(this, null);
         time();
         AppManager.getAppManager().addActivity(this);
@@ -421,7 +430,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
             public void onClick(View view) {
                 mService.pausePlay();
                 if (mService.isPlay()) {
-                    mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
+                    mPauseImageButton.setBackgroundResource(R.drawable.pause);
                 } else {
                     mPauseImageButton.setBackgroundResource(R.drawable.music_play_bg);
                 }
@@ -468,7 +477,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
         Intent intent = new Intent(this, VoiceRecognition.class);
         if (mService.isPlay()) {
             mService.pausePlay();
-            mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
+            mPauseImageButton.setBackgroundResource(R.drawable.pause);
         } else {
             mPauseImageButton.setBackgroundResource(R.drawable.music_play_bg);
         }

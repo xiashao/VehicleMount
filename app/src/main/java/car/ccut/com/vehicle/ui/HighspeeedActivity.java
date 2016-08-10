@@ -4,30 +4,28 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Filter;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,40 +49,30 @@ import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.RecognizerListener;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
-import com.iflytek.cloud.WakeuperListener;
-import com.iflytek.cloud.WakeuperResult;
-import com.iflytek.speech.SynthesizerListener;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import car.ccut.com.vehicle.MyApplication;
 import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.bean.PoiInfos;
 import car.ccut.com.vehicle.listener.MyOrientationListener;
+import car.ccut.com.vehicle.receiver.UITimeReceiver;
 import car.ccut.com.vehicle.service.FloatWindowService;
-import car.ccut.com.vehicle.service.MusicService;
-import car.ccut.com.vehicle.service.VoiceRecognition;
-import car.ccut.com.vehicle.util.JsonParser;
-import car.ccut.com.vehicle.util.MusicUtils;
-import android.widget.Chronometer.OnChronometerTickListener;
+import car.ccut.com.vehicle.service.TimeService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import static car.ccut.com.vehicle.R.color.make_refuel_stock;
 
 public class HighspeeedActivity extends Activity implements OnClickListener {
     private com.iflytek.cloud.SynthesizerListener mTtsListener;
     // 默认云端发音人
     public static String voicerCloud="xiaoyan";
-    private TextView state;
+    public TextView state;
     private SpeechSynthesizer mTts;
     private int isSpeaking = 0;
     private ImageButton call;
@@ -118,12 +106,12 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
      * 方向传感器X方向的值
      */
     private int mXDirection;
-    private Chronometer timer;
-    final int RIGHT = 0;
-    final int LEFT = 1;
-    private boolean macControl=true;
-    private GestureDetector gestureDetector;
+    public static Chronometer timer;
     private boolean isBack;
+    public static String TIME_CHANGED_ACTION = "haha";
+    public static TextView time = null;
+    private Intent timeService = null;
+    private Handler myHandler;
     private AlarmManager alarmManager;
     Intent intent;
     PendingIntent pi;
@@ -135,40 +123,67 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
             isBack = false;
         }
     };
+    private LinearLayout myLayout;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_highspeed);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        intent = new Intent(this, UITimeReceiver.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setAction("haha");
+        timer = (Chronometer)this.findViewById(R.id.chronometer);
+        registerBroadcastReceiver();
+        startTimeService();
         mTts= SpeechSynthesizer.createSynthesizer(this, null);
-        time();
         AppManager.getAppManager().addActivity(this);
         initView();
+        time();
         call.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL,Uri.parse("tel:10010"));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:10010"));
                 startActivity(intent);
             }
         });
     }
+    private void registerBroadcastReceiver(){
+        UITimeReceiver receiver = new UITimeReceiver();
+        IntentFilter filter = new IntentFilter(TIME_CHANGED_ACTION);
+        registerReceiver(receiver, filter);
+    }
+
+    /**
+     * 启动服务
+     */
+    private void startTimeService(){
+        timeService = new Intent(this,TimeService.class);
+        this.startService(timeService);
+    }
 
     private void time(){
-        timer = (Chronometer)this.findViewById(R.id.chronometer);
-        timer.setOnChronometerTickListener(new OnChronometerTickListener() {
+        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 String time = chronometer.getText().toString();
-                if ("00:05".equals(time)) {
-                    startTts("您已经进入疲劳驾驶状态");
-                    state.setText("疲劳驾驶");
+                SimpleDateFormat CurrentTime = new SimpleDateFormat("mm:ss");
+                try {
+                    Date beginTime = CurrentTime.parse(time);
+                    Date endTime = CurrentTime.parse("00:05");
+                    if (((endTime.getTime() - beginTime.getTime()) <= 0)) {
+                        state.setText("疲劳驾驶");
+                        myLayout.setBackgroundColor(Color.parseColor("#EE9A00"));
+                        call.setImageDrawable(getResources().getDrawable(R.drawable.hscall2));
+                        if ((beginTime.getTime() / 1000 - endTime.getTime() / 1000) % 5 == 0) {
+                            startTts("您处于疲劳驾驶状态");
+                        }
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-
             }
         });
-        timer.setBase(SystemClock.elapsedRealtime());
-        //开始计时
-        timer.start();
     }
     private void initView() {
         call=(ImageButton)findViewById(R.id.call);
@@ -176,6 +191,7 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
         state=(TextView)findViewById(R.id.state);
         search = (AutoCompleteTextView) findViewById(R.id.search);
         mBaiduMap = mMapView.getMap();
+        myLayout = (LinearLayout) findViewById(R.id.zhuangtai);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setTrafficEnabled(true);
         //设置地图放缩比例
@@ -329,11 +345,9 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
         myOrientationListener = new MyOrientationListener(
                 getApplicationContext());
         myOrientationListener
-                .setOnOrientationListener(new MyOrientationListener.OnOrientationListener()
-                {
+                .setOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
                     @Override
-                    public void onOrientationChanged(float x)
-                    {
+                    public void onOrientationChanged(float x) {
                         mXDirection = (int) x;
 
                         // 构造定位数据
@@ -364,6 +378,7 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
 
     @Override
     protected void onResume() {
+
         mMapView.onResume();
         super.onResume();
     }
@@ -406,6 +421,7 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
         if (locationClient.isStarted()){
             locationClient.stop();
             locationClient=null;
+
         }
     }
 
