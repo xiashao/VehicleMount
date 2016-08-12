@@ -41,7 +41,7 @@ import car.ccut.com.vehicle.util.DialogHelp;
  */
 public abstract class BaseActivity extends AppCompatActivity implements
         View.OnClickListener,DialogControl,BaseViewInterface {
-    private boolean isVisible;
+    protected boolean isVisible;
     private ProgressDialog waitDialog;
     protected LayoutInflater mInflater;
     @Bind(R.id.tv_title)

@@ -131,6 +131,11 @@ public class TrafficJamModeActivity extends BaseActivity{
         initOritationListener();
     }
 
+    @Override
+    public void initData() {
+
+    }
+
     private void initOritationListener()
     {
         myOrientationListener = new MyOrientationListener(
@@ -162,10 +167,6 @@ public class TrafficJamModeActivity extends BaseActivity{
                 });
     }
 
-    @Override
-    public void initData() {
-
-    }
 
     @Override
     @OnClick({R.id.plugging,R.id.broadcast})
@@ -239,8 +240,8 @@ public class TrafficJamModeActivity extends BaseActivity{
                 public void onResponse(AjaxResponse response) {
                     dataList = gson.fromJson(gson.toJson(response.getResponseData().get("allTrafficJamInfo")),new TypeToken<List<TrafficJam>>(){}.getType());
                     if (dataList!=null&&!dataList.isEmpty()){
-                        addOverlays(dataList);
-                        markerOnclick();
+//                        addOverlays(dataList);
+//                        markerOnclick();
                     }
                 }
             }, params, new Response.ErrorListener() {

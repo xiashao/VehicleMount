@@ -21,19 +21,15 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="路况播报"
             android:textSize="22sp"
-            android:textColor="@drawable/traffic_jam_text_selector"
-            android:background="@drawable/traffic_jam_btn_selector"
+            android:background="@drawable/roadx"
             android:id="@+id/broadcast"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="解堵"
             android:id="@+id/plugging"
-            android:textColor="@drawable/un_traffic_jam_text_selector"
-            android:background="@drawable/un_traffic_jam_btn_selector"
+            android:background="@drawable/jiedux"
             android:textSize="22sp"/>
     </LinearLayout>
 </RelativeLayout>
