@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         int id = view.getId();
         switch (id){
             case R.id.login_btn:
-                if (!isSetTag){
+         /*       if (!isSetTag){
                     return;
                 }
                 useName=userName.getText().toString();
@@ -174,10 +174,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this,"请输入用户名和密码",Toast.LENGTH_SHORT).show();
                 }else {
                     login(useName,psd);
-                }
+                }*/
+                Intent it10=new Intent(this,MapActivity.class);
+                startActivity(it10);
                 break;
             case R.id.login_register:
                 it = new Intent(this,VerifyTelActivity.class);
+            /*    it = new Intent(this,RegisterBaseInfoActivity.class);*/
                 it.putExtra("identification","register");
                 startActivity(it);
                 break;
@@ -207,7 +210,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         Map params = new HashMap();
         params.put("username",username);
+        System.out.println(username);
         params.put("password",MD5.getMd5(password));
+        System.out.println(MD5.getMd5(password));
         JsonRequestWithAuth<AjaxResponse> loginRequest = new JsonRequestWithAuth<AjaxResponse>(ConstantValue.REQUEST_LOGIN, AjaxResponse.class,
                 new Response.Listener<AjaxResponse>() {
                     @Override

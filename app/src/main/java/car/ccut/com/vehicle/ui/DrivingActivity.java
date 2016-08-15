@@ -480,7 +480,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
             mService.pausePlay();
             mPauseImageButton.setBackgroundResource(R.drawable.pause);
         } else {
-            mPauseImageButton.setBackgroundResource(R.drawable.music_play_bg);
+            mPauseImageButton.setBackgroundResource(R.drawable.play_bg);
         }
         if (macControl) {
             startService(intent);
