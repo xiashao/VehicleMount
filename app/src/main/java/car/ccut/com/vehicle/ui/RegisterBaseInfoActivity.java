@@ -114,7 +114,6 @@ public class RegisterBaseInfoActivity extends BaseActivity{
     @Override
     public void initData() {
         userInfo.setUsername(getIntent().getStringExtra("phone"));
-        System.out.println(userInfo.getUsername()+"++++++++");
     }
 
 
@@ -142,6 +141,13 @@ public class RegisterBaseInfoActivity extends BaseActivity{
     }
 
     private void register() {
+        if (userInfo.getSex()==null){
+            if (registerSex.getCheckedRadioButtonId()==male.getId())
+                userInfo.setSex(male.getText().toString());
+            else
+                userInfo.setSex(female.getText().toString());
+        }
+
         if (check()) {
             showWaitDialog();
             Map<String, String> params = new HashMap<>();
@@ -214,7 +220,7 @@ public class RegisterBaseInfoActivity extends BaseActivity{
                 if (data!=null){
                     List<String> photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
                     userInfo.setUserAvatar(photos.get(0));
-                    System.out.println(userInfo.getUserAvatar()+"+++++++++++");
+
                     ImageLoader.getInstance().displayImage("file://"+userInfo.getUserAvatar(),userPhoto);
                 }
                 break;

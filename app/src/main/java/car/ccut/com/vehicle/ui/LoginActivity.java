@@ -168,8 +168,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
          /*       if (!isSetTag){
                     return;
                 }
-                useName=userName.getText().toString();
-                psd= password.getText().toString();
+                useName=userName.getText().toString().trim();
+                psd= password.getText().toString().trim();
                 if (TextUtils.isEmpty(useName)||TextUtils.isEmpty(psd)){
                     Toast.makeText(this,"请输入用户名和密码",Toast.LENGTH_SHORT).show();
                 }else {
@@ -241,6 +241,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
         MyApplication.getHttpQueues().add(loginRequest);
+        MyApplication.getHttpQueues().start();
     }
 
     private void intent(){
