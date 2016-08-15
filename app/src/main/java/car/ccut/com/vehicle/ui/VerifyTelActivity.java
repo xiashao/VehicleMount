@@ -152,6 +152,8 @@ public class VerifyTelActivity extends BaseActivity {
             Log.e("event", "event=" + event);
             if (result == SMSSDK.RESULT_COMPLETE) {
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {//提交验证码成功
+                    if (phString==null)
+                        phString = registerPhone.getText().toString().trim();
                     //判断前一个activity
                     if (identification.equals("register")) {
                         Intent it1 = new Intent(VerifyTelActivity.this, RegisterBaseInfoActivity.class);

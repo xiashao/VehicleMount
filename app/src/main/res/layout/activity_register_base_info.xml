@@ -95,11 +95,11 @@
                 android:layout_width="match_parent"
                 android:id="@+id/select_address"
                 android:layout_height="48dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/item_bg">
                 <TextView
                     style="@style/add_car_item_input_style"
                     android:id="@+id/register_address"
-                    android:layout_toRightOf="@+id/register_location_text"
                     android:text="请选择地区"/>
                 <ImageView
                     style="@style/item_arrow"/>
