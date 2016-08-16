@@ -18,7 +18,7 @@
     <string name="user_center_password_change">修改密码</string>
     <string name="user_center_register">注册新账号</string>
     <string name="user_center_service">联系客服</string>
-    <string name="user_center_quit">退出当前账号</string>
+    <string name="user_center_quit">切换当前账号</string>
     <string name="refuel_user_name">姓&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;名:</string>
     <string name="refuel_user_tel">联系电话:</string>
     <string name="refuel_time">加油日期:</string>

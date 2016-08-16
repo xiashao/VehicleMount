@@ -31,6 +31,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -242,6 +243,7 @@ public class TrafficJamModeActivity extends BaseActivity{
                     if (dataList!=null&&!dataList.isEmpty()){
 //                        addOverlays(dataList);
 //                        markerOnclick();
+                       addData();
                     }
                 }
             }, params, new Response.ErrorListener() {
@@ -254,18 +256,24 @@ public class TrafficJamModeActivity extends BaseActivity{
             MyApplication.getHttpQueues().start();
         }
     }
+private void addData(){
+    List<TrafficJam> trafficJams=new ArrayList<TrafficJam>();
+    TrafficJam trafficJams1 = new TrafficJam(34.242652, 108.971171,"英伦贵族小旅馆") ;
+    trafficJams.add(trafficJams1);
+    addOverlays(trafficJams);
+}
 
     //添加覆盖物
     private void addOverlays(List<TrafficJam> trafficJams){
         mBaiduMap.clear();
-        OverlayOptions options;
+        OverlayOptions options= null;
         for (TrafficJam trafficJam : trafficJams){
-            LatLng latLng = new LatLng(Double.valueOf(trafficJam.getLatitude()),Double.valueOf(trafficJam.getLatitude()));
-//            if ("严重拥堵".equals(trafficJam.getJamStatus())){
-//                mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.gas_station_icon));
-//            }else if ("轻度拥堵".equals(trafficJam.getJamStatus())){
-//                mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.location));
-//            }
+            LatLng latLng = new LatLng(trafficJam.getLatitude(),trafficJam.getLatitude());
+           if ("严重拥堵".equals(trafficJam.getJamStatus())){
+               mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.gas_station_icon));
+           }else if ("轻度拥堵".equals(trafficJam.getJamStatus())){
+                mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.location));
+            }
             mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.gas_station_icon));
             options = new MarkerOptions().position(latLng).icon(mMarker).zIndex(5);
             Marker marker = (Marker) mBaiduMap.addOverlay(options);
@@ -274,7 +282,6 @@ public class TrafficJamModeActivity extends BaseActivity{
             marker.setExtraInfo(bundle);
         }
     }
-
     //覆盖物点击事件
     private void markerOnclick(){
         mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {

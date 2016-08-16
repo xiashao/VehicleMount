@@ -67,6 +67,7 @@ import car.ccut.com.vehicle.bean.Mp3;
 import car.ccut.com.vehicle.bean.PoiInfos;
 import car.ccut.com.vehicle.bean.Refuel.RefuelStationInfo;
 import car.ccut.com.vehicle.listener.MyOrientationListener;
+import car.ccut.com.vehicle.receiver.UITimeReceiver;
 import car.ccut.com.vehicle.service.FloatWindowService;
 import car.ccut.com.vehicle.service.MusicService;
 import car.ccut.com.vehicle.service.VoiceRecognition;

@@ -147,7 +147,7 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
         call.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:10010"));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:12122"));
                 startActivity(intent);
             }
         });

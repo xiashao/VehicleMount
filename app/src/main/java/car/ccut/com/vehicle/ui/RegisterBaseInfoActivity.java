@@ -184,6 +184,10 @@ public class RegisterBaseInfoActivity extends BaseActivity{
 
     public boolean check() {
         userInfo.setNickName(nickName.getText().toString());
+        if(password.length()<6){
+            Toast.makeText(this, "密码至少6位", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if (TextUtils.isEmpty(userInfo.getNickName())) {
             Toast.makeText(this, "请输入姓名", Toast.LENGTH_SHORT).show();
             return false;

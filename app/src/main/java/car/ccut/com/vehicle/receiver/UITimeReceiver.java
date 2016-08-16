@@ -22,7 +22,6 @@ import car.ccut.com.vehicle.ui.HighspeeedActivity;
 
 /**
  * 自定义的UI层BroadcastReceiver，负责监听从后台Service发送过来的广播，根据广播数据更新UI
- * @author zhangyg
  */
 public class UITimeReceiver extends BroadcastReceiver{
     private HighspeeedActivity dUIActivity = new HighspeeedActivity();

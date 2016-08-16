@@ -21,8 +21,8 @@ import java.io.Serializable;
  */
 public class TrafficJam implements Serializable{
     private int id;
-    private String latitude;
-    private String lontitude;
+    private double latitude;
+    private double lontitude;
     private String address;
     private String jamReason;
     private String jamStatus;
@@ -33,6 +33,16 @@ public class TrafficJam implements Serializable{
     private String city;
     private int isEndJam;
 
+
+    public TrafficJam() {
+    }
+
+    public TrafficJam(double latitude, double lontitude, String address) {
+        this.latitude = latitude;
+        this.lontitude = lontitude;
+        this.address = address;
+    }
+
     public int getId() {
         return id;
     }
@@ -41,19 +51,19 @@ public class TrafficJam implements Serializable{
         this.id = id;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLontitude() {
+    public double getLontitude() {
         return lontitude;
     }
 
-    public void setLontitude(String lontitude) {
+    public void setLontitude(double lontitude) {
         this.lontitude = lontitude;
     }
 

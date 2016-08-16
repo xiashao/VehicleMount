@@ -111,6 +111,7 @@ public class CarInfoDetailsActivity extends BaseActivity {
             @Override
             public void onOtherButtonClick(ActionSheet actionSheet, int index) {
                 updateCarInfo(index);
+                System.out.println("+++++++++++++++++++++++++++++++++++");
             }
         };
     }
@@ -305,8 +306,8 @@ public class CarInfoDetailsActivity extends BaseActivity {
         params.put("id",MyApplication.getCurrentServerCar().getId());
         switch (UPDATE_FLAG){
             case UPDATE_ENGINE:
-                params.put("enginePerformance",info+"");
                 url = ConstantValue.UPDATE_ENGINE_PERFORMANCE;
+                params.put("enginePerformance",info+"");
                 break;
             case UPDATE_TRANSMISSION:
                 url = ConstantValue.UPDATE_TRANSMISSION_PERFORMANCE;

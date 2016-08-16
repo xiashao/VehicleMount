@@ -193,7 +193,7 @@ public class NearbyRefuelStationActivity extends BaseActivity {
     }
 
     private void requestData(double lantitude,double longitude){
-        Map params = new HashMap();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("lon",longitude+"");
         params.put("lat",lantitude+"");
         params.put("r",5000+"");
@@ -208,6 +208,8 @@ public class NearbyRefuelStationActivity extends BaseActivity {
                             for (int i=0;i<response.getResult().getData().size();i++){
                                for (int j=0;j<refuelTypeSize;j++){
                                    String key = MyApplication.getCurrentServerCar().getRefuelType().get(j).getRefuelType();
+                                   System.out.println(response.getResult().getData().get(i).getPrice().get(key));
+
                                    if (response.getResult().getData().get(i).getPrice().get(key)!=null){
                                        stationInfos.add(response.getResult().getData().get(i));
                                        break;
@@ -215,6 +217,7 @@ public class NearbyRefuelStationActivity extends BaseActivity {
                                }
                             }
                             if (stationInfos.size()>0){
+
                                 setListViewData(stationInfos);
                             }
                         }
@@ -234,15 +237,18 @@ public class NearbyRefuelStationActivity extends BaseActivity {
     }
 
     public void setListViewData(final List<RefuelStationInfo> infos){
+        System.out.println("111111111111111111111111111111111111111111111111111111111111111111111111");
         if (adapter==null){
             listView.setAdapter(adapter = new QuickAdapter<RefuelStationInfo>(NearbyRefuelStationActivity.this,R.layout.nearby_refuel_item,
                     infos) {
                 @Override
                 protected void convert(BaseAdapterHelper helper, final RefuelStationInfo item) {
+                    System.out.println("2222222222222222222222222222222222222222222222222222222222222222");
                     keys.clear();
-                    helper.setText(R.id.station_name,item.getName());
-                    helper.setText(R.id.distance,item.getDistance()+"m");
+                    helper.setText(R.id.station_name, item.getName());
+                    helper.setText(R.id.distance, item.getDistance() + "m");
                     if (refuelTypeSize==1){
+                        System.out.println("333333333333333333333333333333333333333333333333333333333333333333");
                         String key1 = MyApplication.getCurrentServerCar().getRefuelType().get(0).getRefuelType();
                         if (item.getPrice().get(key1)!=null){
                             helper.setVisible(R.id.item,true);
