@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         int id = view.getId();
         switch (id){
             case R.id.login_btn:
-         /*       if (!isSetTag){
+                if (!isSetTag){
                     return;
                 }
                 useName=userName.getText().toString().trim();
@@ -174,9 +174,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this,"请输入用户名和密码",Toast.LENGTH_SHORT).show();
                 }else {
                     login(useName,psd);
-                }*/
-                Intent it10=new Intent(this,MapActivity.class);
-                startActivity(it10);
+                }
+            /*    Intent it10=new Intent(this,MapActivity.class);
+                startActivity(it10);*/
                 break;
             case R.id.login_register:
                 it = new Intent(this,VerifyTelActivity.class);

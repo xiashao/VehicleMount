@@ -87,6 +87,7 @@
                 android:padding="10dp"
                 android:orientation="vertical"
                 android:background="#43CD80"
+                android:id="@+id/zhuangtai"
                 android:layout_marginLeft="2dp">
                 <LinearLayout
                     android:layout_width="match_parent"

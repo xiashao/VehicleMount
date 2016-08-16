@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Filter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -126,6 +128,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     };
 
     Intent intent;
+    private LinearLayout myLayout;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -171,6 +174,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                 String time = chronometer.getText().toString();
                 if ("00:05".equals(time)) {
                     startTts("您已经进入疲劳驾驶状态");
+                    myLayout.setBackgroundColor(Color.parseColor("#EE9A00"));
                     state.setText("疲劳驾驶");
                 }
 
@@ -204,12 +208,12 @@ public class DrivingActivity extends Activity implements OnClickListener {
 
         switch (action) {
             case RIGHT:
-                mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
+                mPauseImageButton.setBackgroundResource(R.drawable.pause);
                 mService.nextMusic();
                 break;
 
             case LEFT:
-                mPauseImageButton.setBackgroundResource(R.drawable.music_pause_bg);
+                mPauseImageButton.setBackgroundResource(R.drawable.pause);
                 mService.frontMusic();
                 break;
 
@@ -217,6 +221,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     }
     private void initView() {
 //        mFrontImageButton = (Button) findViewById(R.id.LastImageButton);
+        myLayout = (LinearLayout) findViewById(R.id.zhuangtai);
         mPauseImageButton = (Button) findViewById(R.id.PauseImageButton);
 //        mNextImageButton = (Button) findViewById(R.id.NextImageButton);
         state=(TextView)findViewById(R.id.state);
@@ -433,7 +438,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
                 if (mService.isPlay()) {
                     mPauseImageButton.setBackgroundResource(R.drawable.pause);
                 } else {
-                    mPauseImageButton.setBackgroundResource(R.drawable.music_play_bg);
+                    mPauseImageButton.setBackgroundResource(R.drawable.play_bg);
                 }
             }
         });
@@ -509,9 +514,6 @@ public class DrivingActivity extends Activity implements OnClickListener {
     }
     @Override
     protected void onResume() {
-        /**
-         * 设置为横屏
-         */
 
         mMapView.onResume();
         super.onResume();

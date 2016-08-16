@@ -83,6 +83,7 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
                         dialog.dismiss();
                         showWaitDialog();
                         submit();
+                        finish();
                     }
                 })
                 .setNegativeButton("取消", new View.OnClickListener() {
