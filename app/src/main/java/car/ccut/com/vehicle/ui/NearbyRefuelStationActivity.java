@@ -163,6 +163,10 @@ public class NearbyRefuelStationActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+        refuelTypeSize = MyApplication.getCurrentServerCar().getRefuelType().size();
+        showWaitDialog("正在加载,请稍后...");
+        initLocation();
+        hideWaitDialog();
         super.onResume();
     }
 

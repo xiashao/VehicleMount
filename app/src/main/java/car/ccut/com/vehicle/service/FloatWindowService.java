@@ -132,6 +132,7 @@ public class FloatWindowService extends Service implements View.OnClickListener 
 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId){
+        flags = START_STICKY;
         wmParams = new WindowManager.LayoutParams();
         mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
         //访问service提供的服务
