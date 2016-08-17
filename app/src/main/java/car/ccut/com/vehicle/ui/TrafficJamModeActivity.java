@@ -31,7 +31,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,7 +117,7 @@ public class TrafficJamModeActivity extends BaseActivity{
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setTrafficEnabled(true);;
         //设置地图放缩比例
-        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15.0f);
+        MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(13.0f);
         mBaiduMap.setMapStatus(msu);
         locationClient = new LocationClient(this);
         myLocationListener = new MyLocationListener();
@@ -127,7 +126,7 @@ public class TrafficJamModeActivity extends BaseActivity{
         option.setCoorType("bd09ll");
         option.setOpenGps(true);
         option.setIsNeedAddress(true);
-        option.setScanSpan(10000);
+        option.setScanSpan(5000);
         locationClient.setLocOption(option);
         initOritationListener();
     }
@@ -175,6 +174,7 @@ public class TrafficJamModeActivity extends BaseActivity{
         int id = view.getId();
         switch (id){
             case R.id.plugging:
+                updateTrafficJamInfo();
                 break;
             case R.id.broadcast:
                 Intent intent = new Intent(this,BroadcastStatusActivity.class);
@@ -241,40 +241,34 @@ public class TrafficJamModeActivity extends BaseActivity{
                 public void onResponse(AjaxResponse response) {
                     dataList = gson.fromJson(gson.toJson(response.getResponseData().get("allTrafficJamInfo")),new TypeToken<List<TrafficJam>>(){}.getType());
                     if (dataList!=null&&!dataList.isEmpty()){
-//                        addOverlays(dataList);
-//                        markerOnclick();
-                       addData();
+                        addOverlays(dataList);
+                        markerOnclick();
                     }
                 }
             }, params, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(TrafficJamModeActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(TrafficJamModeActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
                 }
             });
             MyApplication.getHttpQueues().add(getTrafficJamInfo);
             MyApplication.getHttpQueues().start();
         }
     }
-private void addData(){
-    List<TrafficJam> trafficJams=new ArrayList<TrafficJam>();
-    TrafficJam trafficJams1 = new TrafficJam(34.242652, 108.971171,"英伦贵族小旅馆") ;
-    trafficJams.add(trafficJams1);
-    addOverlays(trafficJams);
-}
 
     //添加覆盖物
     private void addOverlays(List<TrafficJam> trafficJams){
         mBaiduMap.clear();
-        OverlayOptions options= null;
+        OverlayOptions options;
         for (TrafficJam trafficJam : trafficJams){
-            LatLng latLng = new LatLng(trafficJam.getLatitude(),trafficJam.getLatitude());
-           if ("严重拥堵".equals(trafficJam.getJamStatus())){
-               mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.gas_station_icon));
-           }else if ("轻度拥堵".equals(trafficJam.getJamStatus())){
-                mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.location));
+            double lan = Double.valueOf(trafficJam.getLatitude()).doubleValue();
+            double lon = Double.valueOf(trafficJam.getLontitude()).doubleValue();
+            LatLng latLng = new LatLng(lan,lon);
+            if ("严重拥堵".equals(trafficJam.getJamStatus())){
+                mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.heavy_jam));
+            }else if ("轻度拥堵".equals(trafficJam.getJamStatus())){
+                mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.light_jam));
             }
-            mMarker = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.getResources(),R.mipmap.gas_station_icon));
             options = new MarkerOptions().position(latLng).icon(mMarker).zIndex(5);
             Marker marker = (Marker) mBaiduMap.addOverlay(options);
             Bundle bundle = new Bundle();
@@ -282,6 +276,7 @@ private void addData(){
             marker.setExtraInfo(bundle);
         }
     }
+
     //覆盖物点击事件
     private void markerOnclick(){
         mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
@@ -314,10 +309,12 @@ private void addData(){
             return;
         }
         params.clear();
+        showWaitDialog();
         params.put("id",MyApplication.getUpdateTrafficJamInfo().getId());
         JsonRequestWithAuth<AjaxResponse> updateTrafficJamInfo = new JsonRequestWithAuth<AjaxResponse>(ConstantValue.UPDATE_TRAFFIC_JAM_INFO, AjaxResponse.class, new Response.Listener<AjaxResponse>() {
             @Override
             public void onResponse(AjaxResponse response) {
+                hideWaitDialog();
                 Toast.makeText(TrafficJamModeActivity.this,response.getReturnMsg(),Toast.LENGTH_SHORT).show();
                 MyApplication.getUpdateTrafficJamInfo().setEndTrafficJam(true);
                 MyApplication.getUpdateTrafficJamInfo().setId("");
@@ -325,8 +322,11 @@ private void addData(){
         }, params, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                hideWaitDialog();
             }
         });
+        MyApplication.getHttpQueues().add(updateTrafficJamInfo);
+        MyApplication.getHttpQueues().start();
     }
 
     @Override

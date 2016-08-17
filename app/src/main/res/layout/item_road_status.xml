@@ -3,48 +3,54 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp"
-    android:background="@drawable/list_item_bg">
+    android:id="@+id/item_bg">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center">
+        android:gravity="center"
+        android:id="@+id/icon_bg">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/icon"
             android:src="@mipmap/error"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:id="@+id/traffic_info_bg">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/address"
-            android:textColor="#232222"
-            android:textSize="16sp"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/status"
-            android:textColor="#232222"
+            android:textColor="@color/app_theme_blue"
+            android:text="红旗街与湖西路交会"
             android:textSize="16sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/reason"
-            android:textColor="#232222"
+            android:textColor="#616161"
+            android:text="因道路施工"
             android:textSize="16sp"
             android:layout_marginTop="5dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/status"
+            android:layout_marginTop="5dp"
+            android:text="严重拥堵"
+            android:textSize="18sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/predict"
             android:textSize="16sp"
             android:visibility="gone"
-            android:textColor="#232222"
             android:layout_marginTop="5dp"/>
     </LinearLayout>
 </LinearLayout>

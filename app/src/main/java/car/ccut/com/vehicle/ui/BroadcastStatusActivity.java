@@ -81,9 +81,7 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-                        showWaitDialog();
                         submit();
-                        finish();
                     }
                 })
                 .setNegativeButton("取消", new View.OnClickListener() {
@@ -96,7 +94,6 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
 
     @Override
     public void initData() {
-        showWaitDialog();
         locationClient = new LocationClient(this);
         locationListener = new MyLocationListener();
         locationClient.registerLocationListener(locationListener);
@@ -104,15 +101,20 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
         option.setCoorType("bd09ll");
         option.setOpenGps(true);
         option.setIsNeedAddress(true);
-        option.setScanSpan(10000);
+        option.setScanSpan(5000);
         locationClient.setLocOption(option);
-        String city = getIntent().getStringExtra("city");
-        if (city!=null){
+        myCity = getIntent().getStringExtra("city");
+        showWaitDialog();
+    }
+
+    public void getData(){
+        if (myCity!=null||!myCity.equals("")){
             Map params = new HashMap();
-            params.put("city",city);
+            params.put("city",myCity);
             JsonRequestWithAuth<AjaxResponse> getTrafficJamInfo = new JsonRequestWithAuth<AjaxResponse>(ConstantValue.GET_ALL_TRAFFIC_INFO_BY_CITY, AjaxResponse.class, new Response.Listener<AjaxResponse>() {
                 @Override
                 public void onResponse(AjaxResponse response) {
+                    hideWaitDialog();
                     Gson gson = new Gson();
                     dataList = gson.fromJson(gson.toJson(response.getResponseData().get("allTrafficJamInfo")),new TypeToken<List<TrafficJam>>(){}.getType());
                     if (dataList!=null&&!dataList.isEmpty()){
@@ -120,6 +122,16 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
                             mAdapter = new QuickAdapter<TrafficJam>(BroadcastStatusActivity.this, R.layout.item_road_status, dataList) {
                                 @Override
                                 protected void convert(BaseAdapterHelper helper, TrafficJam item) {
+                                    if ("严重拥堵".equals(item.getJamStatus())){
+                                        helper.setBackgroundRes(R.id.item_bg,R.drawable.heavy_jam_selector)
+                                                .setImageResource(R.id.icon,R.mipmap.heavy_jam_icon)
+                                                .setTextColor(R.id.status,getResources().getColor(R.color.heavy_jam_color));
+
+                                    }else if("轻度拥堵".equals(item.getJamStatus())) {
+                                        helper.setBackgroundRes(R.id.item_bg,R.drawable.light_jam_selector)
+                                                .setImageResource(R.id.icon,R.mipmap.light_jam_icon)
+                                                .setTextColor(R.id.status,getResources().getColor(R.color.light_jam_color));
+                                    }
                                     helper.setText(R.id.address, item.getAddress())
                                             .setText(R.id.reason, item.getJamReason())
                                             .setText(R.id.status, item.getJamStatus());
@@ -136,7 +148,7 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
             }, params, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(BroadcastStatusActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(BroadcastStatusActivity.this,"网络错误",Toast.LENGTH_SHORT).show();
                 }
             });
             MyApplication.getHttpQueues().add(getTrafficJamInfo);
@@ -196,12 +208,17 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
             myLontitude = bdLocation.getLongitude();
             myAddress = bdLocation.getAddrStr();
             myCity = bdLocation.getCity();
+            getData();
         }
     }
 
     public boolean check(){
         reason = trafficJamReason.getText().toString().trim();
         status = trafficJamStatus.getText().toString().trim();
+        if (!MyApplication.getUpdateTrafficJamInfo().isEndTrafficJam()){
+            Toast.makeText(this,"您还未发布解堵信息,请先发布解堵信息",Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if ("".equals(reason)){
             Toast.makeText(this,"请选择堵车原因",Toast.LENGTH_SHORT).show();
             return false;
@@ -210,7 +227,7 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
             Toast.makeText(this,"请选择堵车状况",Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (myCity==null){
+        if (myCity==null||myCity.equals("")){
             Toast.makeText(this,"定位失败,请检查定位功能",Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -231,7 +248,9 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
             @Override
             public void onResponse(AjaxResponse response) {
                 hideWaitDialog();
-                System.out.println(response.getResponseData().get("id")+"+++++++");
+                MyApplication.getUpdateTrafficJamInfo().setEndTrafficJam(false);
+                MyApplication.getUpdateTrafficJamInfo().setId(response.getResponseData().get("id").toString());
+                finish();
             }
         }, params, new Response.ErrorListener() {
             @Override

@@ -93,12 +93,12 @@
         <service android:name="com.cheshouye.api.client.WeizhangIntentService"/>
         <service android:name=".service.FloatWindowService"/>
         <service android:name=".service.MyService"></service>
+        <!--<meta-data-->
+            <!--android:name="com.baidu.lbsapi.API_KEY"-->
+            <!--android:value="Sk2wxXFuiEzGTOON1xf8Ke1NqVBMwlXO"/>-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Sk2wxXFuiEzGTOON1xf8Ke1NqVBMwlXO"/>
-        <!--<meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="Ktl1AKoU63CoPXy7PfcjKd938cE03jNY"/>-->
+            android:value="Ktl1AKoU63CoPXy7PfcjKd938cE03jNY"/>
         <meta-data android:name="design_width" android:value="768"/>
         <meta-data android:name="design_height" android:value="1280"/>
         <activity

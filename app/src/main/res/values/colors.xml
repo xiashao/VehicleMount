@@ -91,4 +91,6 @@
     <color name="sort_normal">#F8F8F8</color>
     <color name="lightBg">#fefefe</color>
     <color name="common_color">#ff4c4c4c</color>
+    <color name="heavy_jam_color">#af2620</color>
+    <color name="light_jam_color">#e57335</color>
 </resources>

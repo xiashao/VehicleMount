@@ -27,6 +27,7 @@ import car.ccut.com.vehicle.ui.DrivingActivity;
 import car.ccut.com.vehicle.ui.HighspeeedActivity;
 import car.ccut.com.vehicle.ui.HomeActivity;
 import car.ccut.com.vehicle.ui.TrafficJamModeActivity;
+import car.ccut.com.vehicle.util.Utils;
 
 
 public class FloatWindowService extends Service implements View.OnClickListener {
@@ -133,87 +134,89 @@ public class FloatWindowService extends Service implements View.OnClickListener 
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId){
         flags = START_STICKY;
-        wmParams = new WindowManager.LayoutParams();
-        mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
-        //访问service提供的服务
-        setbutton2view();//设置button绑定view
-        float_window_menu.setVisibility(View.GONE);
-        create_float_window();
-        create_float_windowmenu();
+        if (!Utils.isServiceWork(this,"car.ccut.com.vehicle.service.FloatWindowService")){
+            wmParams = new WindowManager.LayoutParams();
+            mWindowManager = (WindowManager)getApplication().getSystemService(getApplication().WINDOW_SERVICE);
+            //访问service提供的服务
+            setbutton2view();//设置button绑定view
+            float_window_menu.setVisibility(View.GONE);
+            create_float_window();
+            create_float_windowmenu();
 
-        float_window_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    float_window_menu_animation(-1);
-                    //stopinitButtonSetting(timer,timerTask);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        floatwindowbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (clickflag == true) {//不是onTouch事件
+            float_window_menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     try {
-                        float_window_menu_animation(1);
-                        //timer = initButtonSetting(timer,timerTask);
+                        float_window_menu_animation(-1);
+                        //stopinitButtonSetting(timer,timerTask);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-            }
-        });
+            });
 
-        floatwindowbutton.setOnTouchListener(new View.OnTouchListener() {
-            int lastx, lasty;
-            int downx, downy;
-
-            @Override
-            public boolean onTouch(View v, final MotionEvent event) {
-
-                ObjectAnimator objectAnimator = new ObjectAnimator();
-                objectAnimator = ObjectAnimator.ofFloat(floatwindowbutton,"Alpha",1.0f,1.0f);
-                objectAnimator.setDuration(2000);
-                objectAnimator.start();
-                Message message = new Message();
-                message.what = 111;
-                handler.sendMessageDelayed(message,2100);
-
-                // TODO Auto-generated method stub
-                int eventaction = event.getAction();
-                switch (eventaction) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastx = (int) event.getRawX();
-                        lasty = (int) event.getRawY();
-                        downx = lastx;
-                        downy = lasty;
-                        clickflag=true;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        if (Math.abs((int) (event.getRawX() - downx)) > 3 || Math.abs((int) (event.getRawY() - downy)) > 3) {
-                            clickflag = false;
-                        } else {
-                            clickflag = true;
+            floatwindowbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (clickflag == true) {//不是onTouch事件
+                        try {
+                            float_window_menu_animation(1);
+                            //timer = initButtonSetting(timer,timerTask);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                        if (clickflag == false) {
-                            //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                            wmParams.x = (int) event.getRawX() - floatwindowbutton.getMeasuredWidth() / 2;
-                            //减25为状态栏的高度
-                            wmParams.y = (int) event.getRawY() - floatwindowbutton.getMeasuredHeight() / 2 - 25;
-                            //刷新
-                            mWindowManager.updateViewLayout(float_window_small, wmParams);
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        break;
+                    }
                 }
-                return false;  //此处必须返回false，否则OnClickListener获取不到监听
-            }
-        });
+            });
 
+            floatwindowbutton.setOnTouchListener(new View.OnTouchListener() {
+                int lastx, lasty;
+                int downx, downy;
+
+                @Override
+                public boolean onTouch(View v, final MotionEvent event) {
+
+                    ObjectAnimator objectAnimator = new ObjectAnimator();
+                    objectAnimator = ObjectAnimator.ofFloat(floatwindowbutton,"Alpha",1.0f,1.0f);
+                    objectAnimator.setDuration(2000);
+                    objectAnimator.start();
+                    Message message = new Message();
+                    message.what = 111;
+                    handler.sendMessageDelayed(message,2100);
+
+                    // TODO Auto-generated method stub
+                    int eventaction = event.getAction();
+                    switch (eventaction) {
+                        case MotionEvent.ACTION_DOWN:
+                            lastx = (int) event.getRawX();
+                            lasty = (int) event.getRawY();
+                            downx = lastx;
+                            downy = lasty;
+                            clickflag=true;
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (Math.abs((int) (event.getRawX() - downx)) > 3 || Math.abs((int) (event.getRawY() - downy)) > 3) {
+                                clickflag = false;
+                            } else {
+                                clickflag = true;
+                            }
+                            if (clickflag == false) {
+                                //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                                wmParams.x = (int) event.getRawX() - floatwindowbutton.getMeasuredWidth() / 2;
+                                //减25为状态栏的高度
+                                wmParams.y = (int) event.getRawY() - floatwindowbutton.getMeasuredHeight() / 2 - 25;
+                                //刷新
+                                mWindowManager.updateViewLayout(float_window_small, wmParams);
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            break;
+                    }
+                    return false;  //此处必须返回false，否则OnClickListener获取不到监听
+                }
+            });
+
+        }
         return super.onStartCommand(intent,flags,startId);
     }
 
