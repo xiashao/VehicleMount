@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -78,6 +79,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         ButterKnife.bind(this);
         Intent i=getIntent();
         String phString=i.getStringExtra("phone");
@@ -113,7 +118,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStop();
         locationClient.stop();
     }
-
+private void cleanPassword()
+{
+    password.setText("");
+}
     private void initData() {
         useName = myPreferences.getString("username", "");
         psd = myPreferences.getString("password","");
@@ -231,6 +239,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }else {
                             System.out.println(response.getResponseStatus());
                             Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                            cleanPassword();
                             dialog.dismiss();
                         }
                     }

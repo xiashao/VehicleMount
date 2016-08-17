@@ -1,6 +1,7 @@
 package car.ccut.com.vehicle.ui;
 
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,6 +54,10 @@ public class OrderDetailsActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setTitle("订单详情");
         if (order!=null){
             try {

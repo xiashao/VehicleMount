@@ -149,6 +149,10 @@ public class MapActivity extends BaseActivity{
     }
     @Override
     public void initView() {
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setTitle("当前位置");
         Intent serviceintent = new Intent(MapActivity.this, FloatWindowService.class);
         startService(serviceintent);

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -74,6 +75,10 @@ public class SelectRefuelTypeActivity extends AppCompatActivity implements View.
     }
 
     public void initView() {
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         Collections.sort(toUpperCase(mList), new PinyinComparatorRefuel());
         mListView.setAdapter(new QuickAdapter<CheckRefuelType>(this,R.layout.selecter_refuel_type_item,mList) {
             @Override

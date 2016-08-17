@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import butterknife.Bind;
@@ -60,6 +61,10 @@ public class HomeActivity extends FragmentActivity {
     }
 
     private void initView() {
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.first, fragment1).add(R.id.second, fragment2)
                 .commit();

@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -134,6 +135,10 @@ public class DrivingActivity extends Activity implements OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driving);
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         intent = new Intent(this, UITimeReceiver.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setAction("haha");
@@ -143,8 +148,10 @@ public class DrivingActivity extends Activity implements OnClickListener {
         AppManager.getAppManager().addActivity(this);
         MyApplication application = (MyApplication) getApplication();
         mService = application.getmService();
-        mService.setCurrentListItme(0);
-        mService.playMusic(MusicUtils.getAllSongs(this).get(0).getUrl());
+        if(!mService.isPlay()){
+            mService.setCurrentListItme(0);
+            mService.playMusic(MusicUtils.getAllSongs(this).get(0).getUrl());
+        }
         initView();
         setListener();
         gestureDetector = new GestureDetector(DrivingActivity.this,onGestureListener);

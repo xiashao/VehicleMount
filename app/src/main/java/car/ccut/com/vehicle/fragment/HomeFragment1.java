@@ -193,6 +193,12 @@ public class HomeFragment1 extends Fragment implements View.OnClickListener {
         ButterKnife.unbind(this);
     }
 
+    @Override
+    public void onResume() {
+        initData();
+        super.onResume();
+    }
+
     private class MyLocationListener implements BDLocationListener {
 
         @Override

@@ -3,6 +3,7 @@ package car.ccut.com.vehicle.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -78,6 +79,10 @@ public class NearbyRefuelStationActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setTitle("附近加油站");
         showAdd(R.drawable.location_button_bg);
     }

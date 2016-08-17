@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -82,6 +83,10 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
 
     @Override
     public void initView() {
+        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setTitle("预约加油");
         carType.setText(MyApplication.getCurrentServerCar().getCarBrand() + MyApplication.getCurrentServerCar().getCarType());
         refuelTime.setText(currentYear + "-" + currentMonth + "-" + currentDay);
