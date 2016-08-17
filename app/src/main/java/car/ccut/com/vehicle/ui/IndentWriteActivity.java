@@ -4,7 +4,9 @@ package car.ccut.com.vehicle.ui;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +72,7 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
     private int currentDay;
     private String [] refuelItems;
     private float price;
-
+    private boolean flag=false;//标记edittext不会死循环
     DecimalFormat decimalFormat=new DecimalFormat(".00");
 
     @Override
@@ -81,13 +83,68 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
     @Override
     public void initView() {
         setTitle("预约加油");
-        carType.setText(MyApplication.getCurrentServerCar().getCarBrand()+MyApplication.getCurrentServerCar().getCarType());
-        refuelTime.setText(currentYear+"-"+currentMonth+"-"+currentDay);
-        ImageLoader.getInstance().displayImage(ConstantValue.CAR_PHOTO_URL+MyApplication.getCurrentServerCar().getCarPhoto(),current_car_icon);
+        carType.setText(MyApplication.getCurrentServerCar().getCarBrand() + MyApplication.getCurrentServerCar().getCarType());
+        refuelTime.setText(currentYear + "-" + currentMonth + "-" + currentDay);
+        ImageLoader.getInstance().displayImage(ConstantValue.CAR_PHOTO_URL + MyApplication.getCurrentServerCar().getCarPhoto(), current_car_icon);
         refuelType.setText(refuelItems[0]);
         price = stationInfo.getPrice().get(refuelItems[0]);
-        refuelPrice.setText(price+"元/升");
-        moeny.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        refuelPrice.setText(price + "元/升");
+        moeny.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (flag) {
+                    return;
+                }
+                flag = true;
+                if (moeny.length() == 0) {
+                    fuelCount.setText("0");
+                } else {
+                    sumMoney.setText(moeny.getText().toString());
+                    float countRefuel = Float.parseFloat(sumMoney.getText().toString()) / price;
+                    fuelCount.setText(decimalFormat.format(countRefuel));
+                }
+                flag = false;
+            }
+        });
+       fuelCount.addTextChangedListener(new TextWatcher() {
+           @Override
+           public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+           }
+
+           @Override
+           public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+           }
+
+           @Override
+           public void afterTextChanged(Editable s) {
+               if (flag) {
+                   return;
+               }
+               flag = true;
+               if (fuelCount.length()==0){
+                   moeny.setText("0");
+               }
+               else{
+                   float countMony = Float.parseFloat(fuelCount.getText().toString())*price;
+                   moeny.setText(decimalFormat.format(countMony));
+                   sumMoney.setText(decimalFormat.format(countMony));
+               }
+               flag = false;
+           }
+       });
+ /*       moeny.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if (!b){
@@ -110,7 +167,7 @@ public class IndentWriteActivity extends BaseActivity implements ActionSheet.Act
                     }
                 }
             }
-        });
+        });*/
     }
 
     @Override
