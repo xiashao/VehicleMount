@@ -177,17 +177,29 @@ public class QuickMarkActivity extends BaseActivity implements BDLocationListene
     private void addOrder() {
         Map<String, String> params = new HashMap<>();
         params.put("userId", MyApplication.getCurrentUser().getUsername());
-        params.put("orderNum",orderRefuelInfo.getOrderNum());
+        System.out.println(MyApplication.getCurrentUser().getUsername());
+        params.put("orderNum", orderRefuelInfo.getOrderNum());
+        System.out.println(orderRefuelInfo.getOrderNum());
         params.put("address", orderRefuelInfo.getAddress());
+        System.out.println(orderRefuelInfo.getAddress());
         params.put("carId", orderRefuelInfo.getCarNum());
-        params.put("latx", orderRefuelInfo.getLantitude()+"");
+        System.out.println(orderRefuelInfo.getCarNum());
+        params.put("latx", orderRefuelInfo.getLantitude() + "");
+        System.out.println(orderRefuelInfo.getLantitude());
         params.put("laty", orderRefuelInfo.getLontitude() + "");
+        System.out.println(orderRefuelInfo.getLontitude());
         params.put("fuelName", orderRefuelInfo.getFuelName());
+        System.out.println(orderRefuelInfo.getFuelName());
         params.put("gasQuatity", orderRefuelInfo.getFuelCount() + "");
+        System.out.println(orderRefuelInfo.getFuelCount());
         params.put("amount", orderRefuelInfo.getMoney() + "");
+        System.out.println(orderRefuelInfo.getMoney());
         params.put("gasType", orderRefuelInfo.getRefuelType() + "");
+        System.out.println(orderRefuelInfo.getRefuelType());
         params.put("orderTime", orderRefuelInfo.getOrderDate());
-        params.put("status",ConstantValue.ORDER_UNFINISHED+"");
+        System.out.println(orderRefuelInfo.getOrderDate());
+        params.put("status", ConstantValue.ORDER_UNFINISHED + "");
+        System.out.println( ConstantValue.ORDER_UNFINISHED);
         MultipartRequest request = new MultipartRequest(Request.Method.POST, ConstantValue.REQUEST_SAVE_ORDER, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {

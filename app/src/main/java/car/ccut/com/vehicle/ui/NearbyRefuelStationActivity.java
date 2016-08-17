@@ -100,9 +100,9 @@ public class NearbyRefuelStationActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        showWaitDialog("正在加载,请稍后...");
         refuelTypeSize = MyApplication.getCurrentServerCar().getRefuelType().size();
         initLocation();
-        showWaitDialog("正在加载,请稍后...");
     }
 
     @Override
@@ -163,10 +163,9 @@ public class NearbyRefuelStationActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        refuelTypeSize = MyApplication.getCurrentServerCar().getRefuelType().size();
         showWaitDialog("正在加载,请稍后...");
+        refuelTypeSize = MyApplication.getCurrentServerCar().getRefuelType().size();
         initLocation();
-        hideWaitDialog();
         super.onResume();
     }
 
@@ -223,6 +222,7 @@ public class NearbyRefuelStationActivity extends BaseActivity {
                             if (stationInfos.size()>0){
 
                                 setListViewData(stationInfos);
+                                hideWaitDialog();
                             }
                         }
                     }
@@ -241,18 +241,15 @@ public class NearbyRefuelStationActivity extends BaseActivity {
     }
 
     public void setListViewData(final List<RefuelStationInfo> infos){
-        System.out.println("111111111111111111111111111111111111111111111111111111111111111111111111");
         if (adapter==null){
             listView.setAdapter(adapter = new QuickAdapter<RefuelStationInfo>(NearbyRefuelStationActivity.this,R.layout.nearby_refuel_item,
                     infos) {
                 @Override
                 protected void convert(BaseAdapterHelper helper, final RefuelStationInfo item) {
-                    System.out.println("2222222222222222222222222222222222222222222222222222222222222222");
                     keys.clear();
                     helper.setText(R.id.station_name, item.getName());
                     helper.setText(R.id.distance, item.getDistance() + "m");
                     if (refuelTypeSize==1){
-                        System.out.println("333333333333333333333333333333333333333333333333333333333333333333");
                         String key1 = MyApplication.getCurrentServerCar().getRefuelType().get(0).getRefuelType();
                         if (item.getPrice().get(key1)!=null){
                             helper.setVisible(R.id.item,true);

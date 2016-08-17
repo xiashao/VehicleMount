@@ -1,5 +1,6 @@
 package car.ccut.com.vehicle.ui;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -90,11 +91,13 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
                         dialog.dismiss();
                     }
                 });
+        MyApplication.getUpdateTrafficJamInfo().setEndTrafficJam(true);
     }
 
     @Override
     public void initData() {
         locationClient = new LocationClient(this);
+        System.out.println("66666666666666666666666666666");
         locationListener = new MyLocationListener();
         locationClient.registerLocationListener(locationListener);
         LocationClientOption option = new LocationClientOption();
@@ -115,6 +118,7 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
                 @Override
                 public void onResponse(AjaxResponse response) {
                     hideWaitDialog();
+                    System.out.println("17771711717117777777777777777777777777777777777");
                     Gson gson = new Gson();
                     dataList = gson.fromJson(gson.toJson(response.getResponseData().get("allTrafficJamInfo")),new TypeToken<List<TrafficJam>>(){}.getType());
                     if (dataList!=null&&!dataList.isEmpty()){
@@ -237,29 +241,42 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
     public void submit(){
         showWaitDialog();
         Map params = new HashMap();
-        params.put("latitude",myLatitude+"");
-        params.put("lontitude",myLontitude+"");
-        params.put("address",myAddress);
-        params.put("jamReason",reason);
-        params.put("jamStatus",status);
+        params.put("latitude", myLatitude+"");
+        System.out.println(myLatitude);
+        params.put("lontitude", myLontitude + "");
+        System.out.println(myLontitude);
+        params.put("address", myAddress);
+        System.out.println(myAddress);
+        params.put("jamReason", reason);
+        System.out.println(reason);
+        params.put("jamStatus", status);
+        System.out.println(status);
         params.put("userId", MyApplication.getCurrentUser().getId());
-        params.put("city",myCity);
-        JsonRequestWithAuth<AjaxResponse> addTrafficJam = new JsonRequestWithAuth<AjaxResponse>(ConstantValue.ADD_TRAFFIC_JAM_INFO, AjaxResponse.class, new Response.Listener<AjaxResponse>() {
+        System.out.println(MyApplication.getCurrentUser().getId());
+        params.put("city", myCity);
+        System.out.println(myCity);
+        JsonRequestWithAuth<AjaxResponse> addTrafficJam = new JsonRequestWithAuth<AjaxResponse>(ConstantValue.ADD_TRAFFIC_JAM_INFO, AjaxResponse.class, new Response.Listener<AjaxResponse>()
+        {
             @Override
             public void onResponse(AjaxResponse response) {
                 hideWaitDialog();
+                System.out.println("1111111111111111111111111111111111111111");
                 MyApplication.getUpdateTrafficJamInfo().setEndTrafficJam(false);
                 MyApplication.getUpdateTrafficJamInfo().setId(response.getResponseData().get("id").toString());
-                finish();
+                System.out.println("++++++++++++++++++++++++++++++++++" + response.getResponseData().get("id").toString());
+
             }
         }, params, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 hideWaitDialog();
+                System.out.println("2222222222222222222222222222222221");
             }
         });
         MyApplication.getHttpQueues().add(addTrafficJam);
         MyApplication.getHttpQueues().start();
+        Intent intent = new Intent(this,TrafficJamModeActivity.class);
+        startActivity(intent);
     }
 
     @Override

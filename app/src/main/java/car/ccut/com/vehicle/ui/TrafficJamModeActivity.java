@@ -327,6 +327,7 @@ public class TrafficJamModeActivity extends BaseActivity{
         });
         MyApplication.getHttpQueues().add(updateTrafficJamInfo);
         MyApplication.getHttpQueues().start();
+        mBaiduMap.clear();
     }
 
     @Override

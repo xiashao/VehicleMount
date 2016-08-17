@@ -390,8 +390,8 @@ public class MapActivity extends BaseActivity{
         int id = view.getId();
         switch (id){
             case R.id.iv_title_back:
-                Intent it = new Intent(this,HomeActivity.class);
-                startActivity(it);
+            /*    Intent it = new Intent(this,HomeActivity.class);
+                startActivity(it);*/
                 finish();
                 break;
             case R.id.mac:

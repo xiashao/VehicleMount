@@ -126,15 +126,17 @@
                 android:textSize="16sp"
                 android:id="@+id/button1"
                 android:background="@drawable/yellow_button_bg"/>
-            <Button
-                android:layout_width="93dp"
-                android:layout_height="36dp"
-                android:textColor="@color/white"
-                android:background="@drawable/red_button_bg"
-                android:layout_marginLeft="10dp"
-                android:textSize="16sp"
-                android:id="@+id/button2"
-                android:text="取消"/>
+
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
+<!--
+<Button
+android:layout_width="93dp"
+android:layout_height="36dp"
+android:textColor="@color/white"
+android:background="@drawable/red_button_bg"
+android:layout_marginLeft="10dp"
+android:textSize="16sp"
+android:id="@+id/button2"
+android:text="取消"/>-->
