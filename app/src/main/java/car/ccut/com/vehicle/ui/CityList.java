@@ -55,10 +55,18 @@ public class CityList extends Activity {
 
 
         Bundle bundle = getIntent().getExtras();
+
         provinceName = bundle.getString("province_name");
-        final String provinceId = bundle.getString("province_id");
-
-
+         String provinceId = bundle.getString("province_id");
+        if (provinceId==null){
+            provinceId="23";
+        }
+        if(provinceName==null)
+        {
+            provinceName="上海";
+        }
+        System.out.println("qqqqqqqqqqqqqqqqqq"+provinceName);
+        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"+provinceId);
         lv_list = (ListView) findViewById(R.id.lv_1ist);
 
         mAdapter = new ListAdapter(this, getData(provinceId));
@@ -73,10 +81,24 @@ public class CityList extends Activity {
 
                 Intent intent = new Intent();
                 // 设置cityName
+
+                if(txt_name.getText()==null)
+                {
+                    intent.putExtra("city_name", "上海");
+                }
+               else if(txt_name.getTag().toString()==null)
+                {
+                    intent.putExtra("city_id",
+                            "280");
+                }
+                else{
                 intent.putExtra("city_name", txt_name.getText());
+                System.out.println("+++++++++++++++++++++++++++++++++++++++" + txt_name.getText());
                 // 设置cityId
                 intent.putExtra("city_id",
                         txt_name.getTag().toString());
+                System.out.println("+++++++++++++++++++++++++++++++++++++++" + txt_name.getTag().toString());
+                }
                 setResult(20, intent);
                 finish();
             }

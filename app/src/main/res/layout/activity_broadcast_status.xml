@@ -48,7 +48,8 @@
                     android:layout_marginLeft="20dp"
                     android:layout_centerVertical="true"
                     android:textColor="@color/black"
-                    android:text="路况信息"/>
+                    android:text="路况信息"
+                    android:id="@+id/textView" />
                 <Button
                     android:layout_width="80dp"
                     android:layout_height="35dp"
@@ -60,6 +61,16 @@
                     android:textSize="16sp"
                     android:id="@+id/submit"
                     android:layout_marginRight="20dp"/>
+                <Button
+                    android:layout_width="80dp"
+                    android:layout_height="35dp"
+                    android:background="@color/csy_green"
+                    android:text="寻路"
+                    android:id="@+id/findroad"
+                    android:textColor="@color/lightBg"
+                    android:textSize="16sp"
+                    android:layout_alignTop="@+id/submit"
+                    android:layout_centerHorizontal="true" />
             </RelativeLayout>
             <include layout="@layout/view_line_gray"/>
             <RelativeLayout

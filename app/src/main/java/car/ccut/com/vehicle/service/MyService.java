@@ -23,7 +23,6 @@ public class MyService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        list=(ArrayList<PhoneContact>) PhoneContactDao.getPhoneContacts(MyService.this);
         Log.d(TAG, "onStartCommand() executed");
         return super.onStartCommand(intent, flags, startId);
     }
@@ -31,6 +30,7 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopSelf();
         Log.d(TAG, "onDestroy() executed");
     }
 

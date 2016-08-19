@@ -62,6 +62,10 @@ public class OtherCarQueryActivity extends BaseActivity{
         // 根据默认查询地城市id, 初始化查询项目--显示默认值
         // setQueryItem(defaultCityId, defaultCityName);
         String carNum = MyApplication.getCurrentServerCar().getCarNumber();
+        if (carNum==null){
+            carNum="皖S3K102";
+        }
+        System.out.println("++++++++++++++++++++++++++++++++++++++++"+carNum);
         short_name.setText(carNum.substring(0,1));
 //        query_city.setText(defaultCity);
         chepai_number.setText(carNum.substring(1,carNum.length()));
@@ -75,7 +79,9 @@ public class OtherCarQueryActivity extends BaseActivity{
     public void initData() {
         Intent weizhangIntent = new Intent(OtherCarQueryActivity.this, WeizhangIntentService.class);
         weizhangIntent.putExtra("appId", ConstantValue.VIOLATION_ID);
+        System.out.println("++++++++++++++++++++++++++++++++++++" + ConstantValue.VIOLATION_ID);
         weizhangIntent.putExtra("appKey", ConstantValue.VIOLATION_KEY);
+        System.out.println("++++++++++++++++++++++++++++++++++++" + ConstantValue.VIOLATION_KEY);
         startService(weizhangIntent);
         defaultEngineNum=MyApplication.getCurrentServerCar().getCarMachineNo();
     }

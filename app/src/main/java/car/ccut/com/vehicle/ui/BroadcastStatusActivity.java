@@ -166,7 +166,7 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
     }
 
     @Override
-    @OnClick({R.id.item1,R.id.item2,R.id.iv_title_back,R.id.submit})
+    @OnClick({R.id.item1,R.id.item2,R.id.iv_title_back,R.id.submit,R.id.findroad})
     public void onClick(View view) {
         int id = view.getId();
         switch (id){
@@ -183,6 +183,9 @@ public class BroadcastStatusActivity extends BaseActivity implements ActionSheet
                 if (check())
                     dialog.show();
                 break;
+            case R.id.findroad:
+                Intent it1=new Intent(this,NaviRouterActivity.class);
+                startActivity(it1);
         }
     }
 

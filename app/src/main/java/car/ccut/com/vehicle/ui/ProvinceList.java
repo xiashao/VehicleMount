@@ -36,7 +36,7 @@ public class ProvinceList extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.csy_activity_citys);
         //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.csy_titlebar);
-
+        System.out.println("11111111111111111111111");
         //标题
         TextView txtTitle = (TextView) findViewById(R.id.tv_title);
         txtTitle.setText("选择查询地-省份");
@@ -61,11 +61,11 @@ public class ProvinceList extends Activity {
                                     int position, long id) {
 
                 TextView txt_name = (TextView) view.findViewById(R.id.txt_name);
-
                 Intent intent = new Intent();
                 intent.putExtra("province_name", txt_name.getText());
+                System.out.println("________________" + txt_name.getText());
                 intent.putExtra("province_id", txt_name.getTag().toString());
-
+                System.out.println("________________" + txt_name.getTag().toString());
                 intent.setClass(ProvinceList.this, CityList.class);
                 startActivityForResult(intent, 20);
             }
