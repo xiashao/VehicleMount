@@ -229,7 +229,6 @@ public class RegisterBaseInfoActivity extends BaseActivity{
                 if (data!=null){
                     List<String> photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
                     userInfo.setUserAvatar(photos.get(0));
-
                     ImageLoader.getInstance().displayImage("file://"+userInfo.getUserAvatar(),userPhoto);
                 }
                 break;

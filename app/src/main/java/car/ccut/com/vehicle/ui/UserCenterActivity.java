@@ -16,12 +16,15 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -30,11 +33,13 @@ import car.ccut.com.vehicle.MyApplication;
 import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.base.BaseActivity;
+import car.ccut.com.vehicle.base.MultipartRequest;
 import car.ccut.com.vehicle.bean.User;
 import car.ccut.com.vehicle.bean.address.Province;
 import car.ccut.com.vehicle.bean.net.AjaxResponse;
 import car.ccut.com.vehicle.interf.ConstantValue;
 import car.ccut.com.vehicle.network.JsonRequestWithAuth;
+import car.ccut.com.vehicle.photopick.PhotoPickerActivity;
 import car.ccut.com.vehicle.util.MD5;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -64,7 +69,6 @@ public class UserCenterActivity extends BaseActivity {
     TextView userAddress;
     @Bind(R.id.user_avatar)
     CircleImageView userAvatar;
-
     private Intent it;
     private SharedPreferences myPreferences;
     private String defaultPassword="";
@@ -74,10 +78,29 @@ public class UserCenterActivity extends BaseActivity {
     private static final int UPDATE_SEX = 2;
     private String updateName="";
     private String updateSex="";
+    private String updateAvatar=null;
     private String updatePassword="";
     private User user;
-
-
+    private static final int REQUEST_PHOTO = 9002;
+    private User userInfo=new User();
+    private void selectPhoto(){
+        Intent intent = new Intent(UserCenterActivity.this, PhotoPickerActivity.class);
+        intent.putExtra(PhotoPickerActivity.EXTRA_SHOW_CAMERA, true);
+        startActivityForResult(intent, REQUEST_PHOTO);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case REQUEST_PHOTO:
+                if (data!=null){
+                    List<String> photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_RESULT);
+                    updateAvatar = photos.get(0);
+                    updateAvatar(MyApplication.getCurrentUser().getId(),updateAvatar);
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -108,12 +131,18 @@ public class UserCenterActivity extends BaseActivity {
 
     @Override
     @OnClick({R.id.iv_title_back,R.id.name_layout,R.id.sex_layout, R.id.update_phone_layout,
-                R.id.update_psd_layout,R.id.register_layout,R.id.connect_service,R.id.exit_btn})
+                R.id.update_psd_layout,R.id.register_layout,R.id.connect_service,R.id.exit_btn
+    ,R.id.user_avatar
+    })
     public void onClick(final View view) {
         int id = view.getId();
         switch (id) {
             case R.id.iv_title_back:
                 onBackPressed();
+                break;
+            case R.id.user_avatar:
+                selectPhoto();
+
                 break;
             case R.id.name_layout:
                 // 取得自定义View
@@ -296,7 +325,7 @@ public class UserCenterActivity extends BaseActivity {
         editor.commit();
     }
 
-    public void updateUserInfo(User user, final int flag){
+    public void updateUserInfo(final User user, final int flag){
         showWaitDialog();
         Map params = new HashMap();
         if (user.getNickName()!=null){
@@ -304,9 +333,6 @@ public class UserCenterActivity extends BaseActivity {
         }
         if (user.getSex()!=null){
             params.put("sex",user.getSex());
-        }
-        if (user.getPassword()!=null){
-            params.put("password",user.getPassword());
         }
         params.put("id",user.getId());
         String url="";
@@ -356,9 +382,42 @@ public class UserCenterActivity extends BaseActivity {
         MyApplication.getHttpQueues().start();
     }
 
+    public void updateAvatar(String userId, final String filePath){
+        if (filePath==null||"".equals(filePath)){
+            Toast.makeText(UserCenterActivity.this,"请选择图片",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        showWaitDialog("正在修改,请稍后...");
+        Map params = new HashMap();
+        params.put("userId",userId);
+        MultipartRequest updateAvatar = new MultipartRequest(Request.Method.POST, ConstantValue.UPDATE_AVATAR,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }, new Response.Listener<AjaxResponse>() {
+            @Override
+            public void onResponse(AjaxResponse response) {
+                if (response.isOk()){
+                    ImageLoader.getInstance().displayImage("file://"+filePath,userAvatar);
+                    Toast.makeText(UserCenterActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                    hideWaitDialog();
+                }else {
+                    Toast.makeText(UserCenterActivity.this,response.getReturnMsg(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        },"file",new File(filePath),params);
+        MyApplication.getHttpQueues().add(updateAvatar);
+        MyApplication.getHttpQueues().start();
+    }
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         MyApplication.getHttpQueues().cancelAll("request");
+        MyApplication.getHttpQueues().cancelAll("updateAvatar");
     }
 }

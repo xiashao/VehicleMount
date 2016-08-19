@@ -38,11 +38,11 @@ public class ConstantValue {
     public static final int ABNORMAL = 1;
 
     //服务器IP地址
-//    public static final String SERVER_IP="111.116.20.180";
-    public static final String SERVER_IP="58.221.44.101";
+    public static final String SERVER_IP="111.116.20.180";
+    public static final String BASE_URL = "http://"+SERVER_IP+"/app/";
+  /*  public static final String SERVER_IP="58.221.44.101";
     public static final String SERVER_PORT = "8088";
-//    public static final String SERVER_PORT = "80";
-    public static final String BASE_URL = "http://"+SERVER_IP+":"+SERVER_PORT+"/app/";
+    public static final String BASE_URL = "http://"+SERVER_IP+":"+SERVER_PORT+"/app/";*/
     public static final String VOICE_RECOGNITION = "appid=5729a06d";
     public static final String IMAGE_BASE_URL = BASE_URL+"photo/";
     public static final String USER_AVATAR_URL = IMAGE_BASE_URL+"avatar/";
@@ -85,6 +85,8 @@ public class ConstantValue {
     public static final String UPDATE_PASSWORD = BASE_URL+"updatePassword";
     //修改性别
     public static final String UPDATE_SEX = BASE_URL+"updateSex";
+    //修改头像
+    public static final String UPDATE_AVATAR = BASE_URL+"updateAvatar";
     //修改车灯状况
     public static final String UPDATE_LAMP_STATUS = CAR_RECORD+"update/lampStatus";
     //修改引擎状况
