@@ -105,7 +105,7 @@ public class TimeService extends Service {
         //设置定位条件
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true);		//是否打开GPS
-        option.setScanSpan(30000);
+        option.setScanSpan(40000);
         option.setCoorType("bd09ll");		//设置返回值的坐标类型。
         option.setProdName("LocationDemo");	//设置产品线名称。强烈建议您使用自定义的产品线名称，方便我们以后为您提供更高效准确的定位服务。
         locationClient.setLocOption(option);

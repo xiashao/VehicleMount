@@ -179,7 +179,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 String time = chronometer.getText().toString();
-                if ("00:05".equals(time)) {
+                if ("00:15".equals(time)) {
                     startTts("您已经进入疲劳驾驶状态");
                     myLayout.setBackgroundColor(Color.parseColor("#EE9A00"));
                     state.setText("疲劳驾驶");
