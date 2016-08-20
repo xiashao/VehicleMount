@@ -107,6 +107,7 @@ public class ProvinceList extends Activity {
         // 获取城市name
         String cityName = bundle.getString("city_name");
         String cityId = bundle.getString("city_id");
+        System.out.println("gggggggggggggggg"+cityId+cityName);
         Intent intent = new Intent();
         intent.putExtra("city_name", cityName);
         intent.putExtra("city_id", cityId);

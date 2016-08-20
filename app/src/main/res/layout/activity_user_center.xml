@@ -113,11 +113,10 @@
                         android:layout_marginTop="2dp"
                         android:id="@+id/image3"/>
                     <TextView
+                        android:id="@+id/userphone"
                         style="@style/user_center_text_style"
                         android:layout_toRightOf="@+id/image3"
                         android:text="@string/user_center_tel_change"/>
-                    <ImageView
-                        style="@style/item_arrow"/>
                 </RelativeLayout>
                 <include layout="@layout/view_line_gray"/>
                 <RelativeLayout

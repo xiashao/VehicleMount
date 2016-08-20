@@ -69,6 +69,8 @@ public class UserCenterActivity extends BaseActivity {
     TextView userAddress;
     @Bind(R.id.user_avatar)
     CircleImageView userAvatar;
+    @Bind(R.id.userphone)
+    TextView userphone;
     private Intent it;
     private SharedPreferences myPreferences;
     private String defaultPassword="";
@@ -123,6 +125,7 @@ public class UserCenterActivity extends BaseActivity {
             userName.setText(MyApplication.getCurrentUser().getNickName());
             userSex.setText(MyApplication.getCurrentUser().getSex());
             userAddress.setText(MyApplication.getCurrentUser().getAddress());
+            userphone.setText(MyApplication.getCurrentUser().getUsername());
             ImageLoader.getInstance().displayImage(ConstantValue.USER_AVATAR_URL+MyApplication.currentUser.getUserAvatar(),userAvatar);
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +133,7 @@ public class UserCenterActivity extends BaseActivity {
     }
 
     @Override
-    @OnClick({R.id.iv_title_back,R.id.name_layout,R.id.sex_layout, R.id.update_phone_layout,
+    @OnClick({R.id.iv_title_back,R.id.name_layout,R.id.sex_layout,
                 R.id.update_psd_layout,R.id.register_layout,R.id.connect_service,R.id.exit_btn
     ,R.id.user_avatar
     })
@@ -160,7 +163,7 @@ public class UserCenterActivity extends BaseActivity {
                                 user = new User();
                                 user.setNickName(updateName);
                                 user.setId(MyApplication.getCurrentUser().getId());
-                                updateUserInfo(user,UPDATE_NICK_NAME);
+                                updateUserInfo(user, UPDATE_NICK_NAME);
                                 //收起键盘
                                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
@@ -199,7 +202,7 @@ public class UserCenterActivity extends BaseActivity {
                             }
                         }).create().show();
                 break;
-            case R.id.update_phone_layout:
+           /* case R.id.update_phone_layout:
                 // 取得自定义View
                 LayoutInflater layoutInflaterPhone = LayoutInflater.from(this);
                 final View myPhoneView = layoutInflaterPhone.inflate(R.layout.dialog_change_phone, null);
@@ -238,7 +241,7 @@ public class UserCenterActivity extends BaseActivity {
                         }).
                         create();
                 alertDialog.show();
-                break;
+                break;*/
             case R.id.update_psd_layout:
                 // 取得自定义View
                 LayoutInflater layoutInflater = LayoutInflater.from(this);

@@ -155,6 +155,11 @@ public class OtherCarQueryActivity extends BaseActivity{
         }
     }
 
+    @Override
+    protected void onResume() {
+        initData();
+        super.onResume();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
