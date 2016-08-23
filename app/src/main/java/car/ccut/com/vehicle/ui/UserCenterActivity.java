@@ -40,6 +40,7 @@ import car.ccut.com.vehicle.bean.net.AjaxResponse;
 import car.ccut.com.vehicle.interf.ConstantValue;
 import car.ccut.com.vehicle.network.JsonRequestWithAuth;
 import car.ccut.com.vehicle.photopick.PhotoPickerActivity;
+import car.ccut.com.vehicle.service.FloatWindowService;
 import car.ccut.com.vehicle.util.MD5;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -315,6 +316,8 @@ public class UserCenterActivity extends BaseActivity {
             case R.id.exit_btn:
                 clearLoginInfo();
                 AppManager.getAppManager().finishAllActivity();
+                intent = new Intent(getBaseContext(), FloatWindowService.class);
+                stopService(intent);
                 it = new Intent(this, LoginActivity.class);
                 startActivity(it);
                 finish();
@@ -337,6 +340,8 @@ public class UserCenterActivity extends BaseActivity {
         if (user.getSex()!=null){
             params.put("sex",user.getSex());
         }
+        if(user.getPassword()!=null)
+            params.put("password",user.getPassword());
         params.put("id",user.getId());
         String url="";
         switch (flag){

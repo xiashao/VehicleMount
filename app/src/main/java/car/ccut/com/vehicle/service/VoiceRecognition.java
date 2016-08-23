@@ -2,6 +2,7 @@ package car.ccut.com.vehicle.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -55,7 +56,7 @@ public class VoiceRecognition extends Service {
     private String TAG = "ivw";
 
     // 语音唤醒对象
-    private VoiceWakeuper mIvw;
+//    private VoiceWakeuper mIvw;
     // 语音识别对象
     private SpeechRecognizer mIat;
     //唤醒得分
@@ -72,6 +73,7 @@ public class VoiceRecognition extends Service {
     // 语音合成对象
     private SpeechSynthesizer mTts;
     private InitListener mTtsInitListener;
+    private AudioManager manager;
     /**
      * 合成回调监听。
      */
@@ -96,10 +98,18 @@ public class VoiceRecognition extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mIvw = VoiceWakeuper.createWakeuper(getApplicationContext(), null);
+//        mIvw = VoiceWakeuper.createWakeuper(getApplicationContext(), null);
         mTts = SpeechSynthesizer.createSynthesizer(getApplicationContext(), mTtsInitListener);
+        manager = (AudioManager) getSystemService(AUDIO_SERVICE);
         initListener();
-        initParams();
+//        initParams();
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+        TTS_TYPE = TTS_CONTROL;
+        startTts("请讲话");
     }
 
     private String getResource() {
@@ -107,73 +117,97 @@ public class VoiceRecognition extends Service {
                 RESOURCE_TYPE.assets, "ivw/5729a06d.jet");
     }
 
-    private void initParams(){
-        mIvw = VoiceWakeuper.getWakeuper();
-        if (mIvw!=null){
-            // 清空参数
-            mIvw.setParameter(SpeechConstant.PARAMS, null);
-            // 设置识别引擎
-//            mIvw.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
-            mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:"
-                    + curThresh);
-            mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "1:"
-                    + curThresh);
-            // 设置唤醒+识别模式
-            mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup");
-            // 设置返回结果格式
-            mIvw.setParameter(SpeechConstant.RESULT_TYPE, "json");
-            // 设置持续进行唤醒
-            mIvw.setParameter(SpeechConstant.KEEP_ALIVE, "1");
-            mIvw.setParameter(SpeechConstant.IVW_NET_MODE, ivwNetMode);
-            mIvw.setParameter(SpeechConstant.IVW_RES_PATH, getResource());
-            // 启动唤醒
-            int ret = mIvw.startListening(mWakeuperListener);
-            if(ret != 0) {
-                System.out.println("语音唤醒失败,错误码:"+ ret);
-            } else {
-                System.out.println("语音唤醒启动成功");
+    AudioManager.OnAudioFocusChangeListener afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+                // Pause playback
+
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                // Resume playback
+
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                manager.abandonAudioFocus(afChangeListener);
+                // Stop playback
+
             }
         }
+    };
+
+    private boolean requestFocus() {
+        // Request audio focus for playback
+        int result = manager.requestAudioFocus(afChangeListener,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+        return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
     }
+//    private void initParams(){
+//        mIvw = VoiceWakeuper.getWakeuper();
+//        if (mIvw!=null){
+//            // 清空参数
+//            mIvw.setParameter(SpeechConstant.PARAMS, null);
+//            // 设置识别引擎
+////            mIvw.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
+//            mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "0:"
+//                    + curThresh);
+//            mIvw.setParameter(SpeechConstant.IVW_THRESHOLD, "1:"
+//                    + curThresh);
+//            // 设置唤醒+识别模式
+//            mIvw.setParameter(SpeechConstant.IVW_SST, "wakeup");
+//            // 设置返回结果格式
+//            mIvw.setParameter(SpeechConstant.RESULT_TYPE, "json");
+//            // 设置持续进行唤醒
+//            mIvw.setParameter(SpeechConstant.KEEP_ALIVE, "1");
+//            mIvw.setParameter(SpeechConstant.IVW_NET_MODE, ivwNetMode);
+//            mIvw.setParameter(SpeechConstant.IVW_RES_PATH, getResource());
+//            // 启动唤醒
+//            int ret = mIvw.startListening(mWakeuperListener);
+//            if(ret != 0) {
+//                System.out.println("语音唤醒失败,错误码:"+ ret);
+//            } else {
+//                System.out.println("语音唤醒启动成功");
+//            }
+//        }
+//    }
 
     private void initListener(){
 
-        mWakeuperListener = new WakeuperListener() {
-            @Override
-            public void onBeginOfSpeech() {
-
-            }
-
-            @Override
-            public void onResult(WakeuperResult wakeuperResult) {
-                try {
-                    String text = wakeuperResult.getResultString();
-                    JSONObject object;
-                    object = new JSONObject(text);
-                    resultScore = Integer.parseInt(object.optString("score"));
-                    if (resultScore>MIN){
-                        TTS_TYPE = TTS_CONTROL;
-                        startTts("请讲话");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(SpeechError speechError) {
-                System.out.println(speechError.getPlainDescription(true));
-            }
-
-            @Override
-            public void onEvent(int eventType, int i1, int i2, Bundle bundle) {
-            }
-
-            @Override
-            public void onVolumeChanged(int i) {
-
-            }
-        };
+//        mWakeuperListener = new WakeuperListener() {
+//            @Override
+//            public void onBeginOfSpeech() {
+//
+//            }
+//
+//            @Override
+//            public void onResult(WakeuperResult wakeuperResult) {
+//                try {
+//                    String text = wakeuperResult.getResultString();
+//                    JSONObject object;
+//                    object = new JSONObject(text);
+//                    resultScore = Integer.parseInt(object.optString("score"));
+//                    if (resultScore>MIN){
+//
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(SpeechError speechError) {
+//                System.out.println(speechError.getPlainDescription(true));
+//            }
+//
+//            @Override
+//            public void onEvent(int eventType, int i1, int i2, Bundle bundle) {
+//            }
+//
+//            @Override
+//            public void onVolumeChanged(int i) {
+//
+//            }
+//        };
 
         /**
          * 听写监听器。
@@ -190,7 +224,7 @@ public class VoiceRecognition extends Service {
                 // Tips：
                 // 错误码：10118(您没有说话)，可能是录音机权限被禁，需要提示用户打开应用的录音权限。
                 Toast.makeText(getApplication(),error.getPlainDescription(true),Toast.LENGTH_SHORT).show();
-                mIvw.startListening(mWakeuperListener);
+//                mIvw.startListening(mWakeuperListener);
             }
 
             @Override
@@ -237,8 +271,9 @@ public class VoiceRecognition extends Service {
                 if(isLast) {
                     //TODO 最后的结果
                     TTS_TYPE = TTS_DEFULT;
-                    mIvw.startListening(mWakeuperListener);
+//                    mIvw.startListening(mWakeuperListener);
                 }
+                onDestroy();
             }
 
             @Override
@@ -326,7 +361,7 @@ public class VoiceRecognition extends Service {
 
     private void startVoice(){
         int ret=0;
-        mIvw.stopListening();
+//        mIvw.stopListening();
         mIat = SpeechRecognizer.createRecognizer(this, mInitListener);
         ret = mIat.startListening(mRecognizerListener);
         if (ret != ErrorCode.SUCCESS) {
@@ -346,10 +381,10 @@ public class VoiceRecognition extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mIvw = VoiceWakeuper.getWakeuper();
-        if (mIvw != null) {
-            mIvw.destroy();
-        }
+//        mIvw = VoiceWakeuper.getWakeuper();
+//        if (mIvw != null) {
+//            mIvw.destroy();
+//        }
         if (mIat!=null){
             mIat.destroy();
         }

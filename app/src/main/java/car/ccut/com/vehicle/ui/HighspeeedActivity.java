@@ -175,13 +175,13 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
                 String time = chronometer.getText().toString();
-                if(time.equals("00:15")){
+                if(time.equals("00:55")){
                     startTts("您处于疲劳驾驶状态");
                 }
                 SimpleDateFormat CurrentTime = new SimpleDateFormat("mm:ss");
                 try {
                     Date beginTime = CurrentTime.parse(time);
-                    Date endTime = CurrentTime.parse("00:15");
+                    Date endTime = CurrentTime.parse("00:55");
                     if (((endTime.getTime() - beginTime.getTime()) <= 0)) {
                         state.setText("疲劳驾驶");
                         myLayout.setBackgroundColor(Color.parseColor("#EE9A00"));

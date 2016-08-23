@@ -65,8 +65,8 @@ public class HomeFragment2 extends Fragment implements View.OnClickListener {
                 break;
             case R.id.drink:
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("酒家检测")
-                        .setMessage("是否向亲密朋友发送自身状态信息？")
+                        .setTitle("酒驾检测")
+                        .setMessage("是否向代驾人员发送自身状态信息？")
                         .setPositiveButton("是", new DialogInterface.OnClickListener() {//添加确定按钮
                             @Override
 

@@ -48,7 +48,7 @@ public class PhoneContactDao {
 			while (phoneCursor.moveToNext()) {
 				String name=phoneCursor.getString(PHONES_DISPLAY_NAME_INDEX);
 				/*if(name.contains("爸")||name.contains("妈")||name.contains("哥")||name.contains("姐")||name.contains("公")||name.contains("婆")||name.contains("鑫"))*/
-				if(name.contains("鑫"))
+				if(name.equals("代驾"))
 				{
 				PhoneContact contact=new PhoneContact();
 				//得到手机号码
@@ -74,7 +74,7 @@ public class PhoneContactDao {
 					contactPhoto = BitmapFactory.decodeStream(input);
 					contact.setContactPhoto(contactPhoto);
 				}
-					String so2="小主人目前处于酒后状态，请及时提醒他，不要酒后驾驶";
+					String so2="小主人处于醉酒状态，代驾人员请及时联系小主人";
 					SmsManager sm= SmsManager.getDefault();
 					sm.sendTextMessage(phoneNumber, null, so2, null, null);
 				contacts.add(contact);

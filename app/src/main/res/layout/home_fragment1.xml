@@ -25,7 +25,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:id="@+id/date"
-                    android:text="8yue26"
+                    android:text="8月23日"
                     android:textColor="@color/home_text_color"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
                     android:textSize="16sp"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/week"
-                    android:text="xingqiliu"
+                    android:text="星期二"
                     android:textColor="@color/text_color"/>
             </LinearLayout>
             <TextView
@@ -41,14 +41,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="60sp"
                 android:typeface="sans"
-                android:text="04:16"
+                android:text="02:16"
                 android:textColor="@color/home_text_color"
                 android:id="@+id/time"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:text="长春市"
+                android:text="南京市"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/home_text_color"
                 android:id="@+id/place"/>
@@ -77,14 +77,14 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:layout_marginRight="10dp"
-                    android:text="36du"
+                    android:text="30℃"
                     android:textColor="@color/text_color"
                     android:id="@+id/temperature"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="大雨"
+                    android:text="多云"
                     android:textColor="@color/text_color"
                     android:id="@+id/weather_text"/>
             </LinearLayout>
