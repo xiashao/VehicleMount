@@ -40,17 +40,17 @@ public class HomeWatcherReceiver extends BroadcastReceiver {
             else if (SYSTEM_DIALOG_REASON_RECENT_APPS.equals(reason)) {
                 // 长按Home键 或者 activity切换键
                 Log.i(LOG_TAG, "long press home key or activity switch");
-                mService.pausePlay();
+
             }
             else if (SYSTEM_DIALOG_REASON_LOCK.equals(reason)) {
                 // 锁屏
                 Log.i(LOG_TAG, "lock");
-                mService.pausePlay();
+
             }
             else if (SYSTEM_DIALOG_REASON_ASSIST.equals(reason)) {
                 // samsung 长按Home键
                 Log.i(LOG_TAG, "assist");
-                mService.pausePlay();
+
             }
 
         }
