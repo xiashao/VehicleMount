@@ -1,8 +1,12 @@
 package car.ccut.com.vehicle.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 
 import car.ccut.com.vehicle.MyApplication;
 import car.ccut.com.vehicle.R;
+import car.ccut.com.vehicle.receiver.HomeWatcherReceiver;
 import car.ccut.com.vehicle.service.MusicService;
 
 public class MusicPlayActivity extends Activity implements OnClickListener {
@@ -25,6 +30,20 @@ public class MusicPlayActivity extends Activity implements OnClickListener {
 	final int RIGHT = 0;
 	final int LEFT = 1;
 	private GestureDetector gestureDetector;
+	private static HomeWatcherReceiver mHomeKeyReceiver = null;
+
+	private static void registerHomeKeyReceiver(Context context) {
+		mHomeKeyReceiver = new HomeWatcherReceiver();
+		final IntentFilter homeFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+
+		context.registerReceiver(mHomeKeyReceiver, homeFilter);
+	}
+
+	private static void unregisterHomeKeyReceiver(Context context) {
+		if (null != mHomeKeyReceiver) {
+			context.unregisterReceiver(mHomeKeyReceiver);
+		}
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -181,5 +200,16 @@ public class MusicPlayActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 
+	}
+	@Override
+	protected void onPause() {
+
+		unregisterHomeKeyReceiver(this);
+		super.onPause();
+	}
+	@Override
+	protected void onResume() {
+		registerHomeKeyReceiver(this);
+		super.onResume();
 	}
 }

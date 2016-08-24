@@ -251,6 +251,11 @@
                 <action android:name="haha"/>
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.HomeWatcherReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS" />
+            </intent-filter>
+        </receiver>
         <service
             android:name="cn.jpush.android.service.DownloadService"
             android:enabled="true"
