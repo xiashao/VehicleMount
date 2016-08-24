@@ -59,6 +59,7 @@ public class MyApplication extends Application {
     public static CarInfo currentServerCar;
     public static User currentUser;
     public static Context context;
+    public static boolean isFloat=false;
     public static UpdateTrafficJamInfo updateTrafficJamInfo;
     public static DisplayImageOptions options = new DisplayImageOptions.Builder()
             .showImageOnLoading(R.mipmap.image_default)
@@ -164,7 +165,13 @@ public class MyApplication extends Application {
         return currentServerCar;
     }
 
-
+    public static void setIsFloat(boolean a)
+    {
+        isFloat=a;
+    }
+    public static boolean getisFloat(){
+        return  isFloat;
+    }
     public static void setCurrentServerCar(CarInfo info){
         currentServerCar = info;
     }

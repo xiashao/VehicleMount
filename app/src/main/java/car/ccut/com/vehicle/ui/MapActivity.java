@@ -60,6 +60,7 @@ import java.util.TimerTask;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import car.ccut.com.vehicle.MyApplication;
 import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.base.BaseActivity;
@@ -154,8 +155,11 @@ public class MapActivity extends BaseActivity{
         //透明导航栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         setTitle("当前位置");
-        Intent serviceintent = new Intent(MapActivity.this, FloatWindowService.class);
-        startService(serviceintent);
+        if(!MyApplication.getisFloat()){
+            Intent serviceintent = new Intent(MapActivity.this, FloatWindowService.class);
+            startService(serviceintent);
+            MyApplication.setIsFloat(true);
+        }
         Intent intent = new Intent(this,MusicService.class);
         bindService(intent,mConnection, Context.BIND_AUTO_CREATE);
         mBaiduMap = mapView.getMap();
