@@ -1,9 +1,9 @@
 package car.ccut.com.vehicle.ui;
 
 import android.app.Activity;
-import android.app.AlarmManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,6 +63,7 @@ import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.bean.PoiInfos;
 import car.ccut.com.vehicle.listener.MyOrientationListener;
+import car.ccut.com.vehicle.receiver.HomeWatcherReceiver;
 import car.ccut.com.vehicle.receiver.UITimeReceiver;
 import car.ccut.com.vehicle.service.FloatWindowService;
 import car.ccut.com.vehicle.service.MusicService;
@@ -130,6 +131,20 @@ public class DrivingActivity extends Activity implements OnClickListener {
 
     Intent intent;
     private LinearLayout myLayout;
+    private static HomeWatcherReceiver mHomeKeyReceiver = null;
+
+    private static void registerHomeKeyReceiver(Context context) {
+        mHomeKeyReceiver = new HomeWatcherReceiver();
+        final IntentFilter homeFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+
+        context.registerReceiver(mHomeKeyReceiver, homeFilter);
+    }
+
+    private static void unregisterHomeKeyReceiver(Context context) {
+        if (null != mHomeKeyReceiver) {
+            context.unregisterReceiver(mHomeKeyReceiver);
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -504,6 +519,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     /**
      * 格式化时间，将其变成00:00的形式
      */
+
     public String formatTime(int time) {
         int secondSum = time / 1000;
         int minute = secondSum / 60;
@@ -522,6 +538,7 @@ public class DrivingActivity extends Activity implements OnClickListener {
     protected void onResume() {
 
         mMapView.onResume();
+        registerHomeKeyReceiver(this);
         super.onResume();
     }
 
@@ -608,6 +625,8 @@ public class DrivingActivity extends Activity implements OnClickListener {
                 }else {
                     AppManager.getAppManager().finishAllActivity();
                     Intent intent = new Intent(this, FloatWindowService.class);
+                    Intent intent1 = new Intent(this, MusicService.class);
+                    stopService(intent1);
                     stopService(intent);
                     finish();
                     System.exit(0);
@@ -624,4 +643,5 @@ public class DrivingActivity extends Activity implements OnClickListener {
             System.out.println(code);
         }
     }
+
 }

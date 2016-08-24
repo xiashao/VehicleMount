@@ -124,6 +124,7 @@ public class FloatWindowService extends Service implements View.OnClickListener 
         }
         try {
             float_window_menu_animation(-1);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getApplication().startActivity(intent);
         } catch (InterruptedException e) {

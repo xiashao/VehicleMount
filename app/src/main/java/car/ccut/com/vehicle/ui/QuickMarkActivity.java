@@ -38,6 +38,7 @@ import car.ccut.com.vehicle.R;
 import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.base.BaseActivity;
 import car.ccut.com.vehicle.base.MultipartRequest;
+import car.ccut.com.vehicle.bean.PoiInfos;
 import car.ccut.com.vehicle.bean.Refuel.OrderRefuel;
 import car.ccut.com.vehicle.bean.net.AjaxResponse;
 import car.ccut.com.vehicle.interf.ConstantValue;
@@ -88,6 +89,7 @@ public class QuickMarkActivity extends BaseActivity implements BDLocationListene
     private List<BNRoutePlanNode> routePlanNodes = new ArrayList<BNRoutePlanNode>();
     private int RoutePlanPreference;
     private String[] routePlanPreferenceItem = {"推荐","躲避拥堵","少收费","高速优先","少走高速"};
+    private PoiInfos finishNode=new PoiInfos();
 
     @Override
     protected int getLayoutId() {
@@ -174,7 +176,8 @@ public class QuickMarkActivity extends BaseActivity implements BDLocationListene
                 addOrder();
                 break;
             case R.id.navi:
-                selectRoutePlanPreference();
+//                selectRoutePlanPreference();
+                navi();
                 break;
         }
     }
@@ -231,6 +234,18 @@ public class QuickMarkActivity extends BaseActivity implements BDLocationListene
         option.setCoorType("bd09ll");
         option.setOpenGps(true);
         locationClient.setLocOption(option);
+    }
+
+    public void navi(){
+        finishNode.setLatitude(orderRefuelInfo.getLantitude());
+        finishNode.setLontitude(orderRefuelInfo.getLontitude());
+        finishNode.setAddress(orderRefuelInfo.getAddress());
+        finishNode.setName(orderRefuelInfo.getFuelName());
+        Intent intent = new Intent(this,NaviRouterActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("finishNode",finishNode);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

@@ -65,6 +65,7 @@ import car.ccut.com.vehicle.bean.PoiInfos;
 import car.ccut.com.vehicle.listener.MyOrientationListener;
 import car.ccut.com.vehicle.receiver.UITimeReceiver;
 import car.ccut.com.vehicle.service.FloatWindowService;
+import car.ccut.com.vehicle.service.MusicService;
 import car.ccut.com.vehicle.service.TimeService;
 
 import static car.ccut.com.vehicle.R.color.make_refuel_stock;
@@ -481,6 +482,8 @@ public class HighspeeedActivity extends Activity implements OnClickListener {
                 }else {
                     AppManager.getAppManager().finishAllActivity();
                     Intent intent = new Intent(this, FloatWindowService.class);
+                    Intent intent1 = new Intent(this, MusicService.class);
+                    stopService(intent1);
                     stopService(intent);
                     finish();
                     System.exit(0);

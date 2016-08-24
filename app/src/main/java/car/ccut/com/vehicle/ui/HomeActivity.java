@@ -17,6 +17,7 @@ import car.ccut.com.vehicle.base.AppManager;
 import car.ccut.com.vehicle.fragment.HomeFragment1;
 import car.ccut.com.vehicle.fragment.HomeFragment2;
 import car.ccut.com.vehicle.service.FloatWindowService;
+import car.ccut.com.vehicle.service.MusicService;
 import car.ccut.com.vehicle.view.DragLayout;
 
 /**
@@ -101,6 +102,8 @@ public class HomeActivity extends FragmentActivity {
                 }else {
                     AppManager.getAppManager().finishAllActivity();
                     Intent intent = new Intent(this, FloatWindowService.class);
+                    Intent intent1 = new Intent(this, MusicService.class);
+                    stopService(intent1);
                     stopService(intent);
                     finish();
                     System.exit(0);

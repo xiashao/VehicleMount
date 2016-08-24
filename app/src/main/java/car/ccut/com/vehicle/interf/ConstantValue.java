@@ -71,6 +71,8 @@ public class ConstantValue {
     public static final String REQUEST_ORDER = BASE_URL+"order/getOrderListPage";
     //更改订单状态
     public static final String UPDATE_ORDER_STATUS = BASE_URL+"/order/updateOrderStatus";
+    //删除订单
+    public static final String DELETE_ORDER = BASE_URL+"/order/deleteOrderById";
     //请求车身级别
     public static final String REQUEST_ALL_CAR_BODY_LEVEL = BASE_URL+"bodyLevel/getAllCarBodyLevel";
     //请求所有车辆基本信息

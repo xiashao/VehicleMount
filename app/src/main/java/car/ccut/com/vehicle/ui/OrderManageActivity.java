@@ -116,6 +116,7 @@ public class OrderManageActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         MyApplication.getHttpQueues().cancelAll("updateOrderStatus");
+        MyApplication.getHttpQueues().cancelAll("deleteOrder");
     }
 
     @Override
@@ -163,10 +164,35 @@ public class OrderManageActivity extends BaseActivity {
                     if (item.getStatus()==ConstantValue.ORDER_UNFINISHED){
                         helper.setText(R.id.order_status,"待加油");
                         helper.setText(R.id.button1,"完成");
+                        helper.setVisible(R.id.delete_btn,false);
                     }else {
                         helper.setText(R.id.order_status,"完成");
                         helper.setText(R.id.button1,"再次预约");
+                        helper.setVisible(R.id.delete_btn,true);
                     }
+                    helper.setOnClickListener(R.id.delete_btn, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            showWaitDialog();
+                            Map params = new HashMap();
+                            params.put("id",item.getId());
+                            JsonRequestWithAuth<AjaxResponse> deleteOrder = new JsonRequestWithAuth<AjaxResponse>(ConstantValue.DELETE_ORDER, AjaxResponse.class, new Response.Listener<AjaxResponse>() {
+                                @Override
+                                public void onResponse(AjaxResponse response) {
+                                    hideWaitDialog();
+                                    orderListAdapter.remove(helper.getPosition());
+                                    Toast.makeText(OrderManageActivity.this,response.getReturnMsg(),Toast.LENGTH_SHORT);
+                                }
+                            }, params, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                            MyApplication.getHttpQueues().add(deleteOrder);
+                            MyApplication.getHttpQueues().start();
+                        }
+                    });
                     helper.setOnClickListener(R.id.button1, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

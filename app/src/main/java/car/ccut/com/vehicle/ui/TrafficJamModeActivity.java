@@ -48,6 +48,7 @@ import car.ccut.com.vehicle.interf.ConstantValue;
 import car.ccut.com.vehicle.listener.MyOrientationListener;
 import car.ccut.com.vehicle.network.JsonRequestWithAuth;
 import car.ccut.com.vehicle.service.FloatWindowService;
+import car.ccut.com.vehicle.service.MusicService;
 
 /**
  * *
@@ -201,6 +202,8 @@ public class TrafficJamModeActivity extends BaseActivity{
                 }else {
                     AppManager.getAppManager().finishAllActivity();
                     Intent intent = new Intent(this, FloatWindowService.class);
+                    Intent intent1 = new Intent(this, MusicService.class);
+                    stopService(intent1);
                     stopService(intent);
                     finish();
                     System.exit(0);
